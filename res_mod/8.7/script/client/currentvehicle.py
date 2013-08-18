@@ -150,13 +150,14 @@ class _CurrentVehicle(object):
         view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
         LOG_NOTE("Base View Range: ", view_distance)
 
-        # Check for Ventilation
-        ventilation = False
+        # Check for Binoculars
+        binoculars = False
 
         # Check for Coated Optics
         coated_optics = False
-        if coated_optics == True:
-            view_distance *= 1.1
+
+        # Check for Ventilation
+        ventilation = False
 
         # Check for Consumable
         consumable = False
@@ -206,20 +207,23 @@ class _CurrentVehicle(object):
 
         xvm_conf = json.loads(data)
 
-        # Update Configuration
-        tank_found = False
+        # Remove current circles
+        def f(x): return x[0] != tank_name
         for tank_data in xvm_conf["minimap"]["circles"]["special"]:
-            if tank_name in tank_data:
-                tank_found = True
-                tank_data[tank_name]["distance"] = view_distance
+            if tank_data.keys()[0] == tank_name:
+                xvm_conf["minimap"]["circles"]["special"].pop(tank_data)
 
-        if tank_found == False:
-            tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
+        if binoculars == True:
+            tank_data = { "color": "0xFFFFFF", "distance": view_distance * 1.25, "alpha": 25, "enabled": True, "thickness": 0.5}
             tank = { tank_name: tank_data }
             xvm_conf["minimap"]["circles"]["special"].append(tank)
 
-        # Check for Binoculars and add major circle (Hack due to only one circle allowed per vehicle)
-        binoculars = False
+        if coated_optics == True:
+            view_distance *= 1.1
+
+        tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
+        tank = { tank_name: tank_data }
+        xvm_conf["minimap"]["circles"]["special"].append(tank)
 
         # Write result
         f = codecs.open(os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc', 'w', '"utf-8-sig"')
