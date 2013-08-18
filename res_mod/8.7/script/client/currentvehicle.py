@@ -153,6 +153,11 @@ class _CurrentVehicle(object):
         # Check for Ventilation
         ventilation = False
 
+        # Check for Coated Optics
+        coated_optics = False
+        if coated_optics == True:
+            view_distance *= 1.1
+
         # Check for Consumable
         consumable = False
 
@@ -165,6 +170,7 @@ class _CurrentVehicle(object):
             for i in range(len(self.__vehicle.crew)):
                 if self.__vehicle.crew[i] == tankman.inventoryId:
                     if tankman.role == "Commander":
+                        # Major Role Skill
                         major_skill = tankman.roleLevel
                         if brothers_in_arms == True:
                             major_skill += 5
@@ -174,6 +180,14 @@ class _CurrentVehicle(object):
                             major_skill += 10
 
                         view_distance *= (major_skill / 100.0)
+
+                        # Recon Skill
+                        recon_skill = 0
+                        view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
+                    if tankman.role = "":
+                        # Situational Awareness Skill
+                        situational_skill = 0
+                        view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
 
         LOG_NOTE("Scaled View Range: ", view_distance)
 
