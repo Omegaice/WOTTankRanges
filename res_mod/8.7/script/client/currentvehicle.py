@@ -150,13 +150,30 @@ class _CurrentVehicle(object):
         view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
         LOG_NOTE("Base View Range: ", view_distance)
 
+        # Check for Ventilation
+        ventilation = False
+
+        # Check for Consumable
+        consumable = False
+
+        # Check for Brothers In Arms
+        brothers_in_arms = False
+
         # Get crew
         tankmen = yield Requester('tankman').getFromInventory()
         for tankman in tankmen:
             for i in range(len(self.__vehicle.crew)):
                 if self.__vehicle.crew[i] == tankman.inventoryId:
                     if tankman.role == "Commander":
-                        view_distance *= (tankman.roleLevel / 100.0)
+                        major_skill = tankman.roleLevel
+                        if brothers_in_arms == True:
+                            major_skill += 5
+                        if ventilation == True:
+                            major_skill += 5
+                        if consumable == True:
+                            major_skill += 10
+
+                        view_distance *= (major_skill / 100.0)
 
         LOG_NOTE("Scaled View Range: ", view_distance)
 
