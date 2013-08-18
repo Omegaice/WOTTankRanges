@@ -184,7 +184,7 @@ class _CurrentVehicle(object):
                         # Recon Skill
                         recon_skill = 0
                         view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
-                    if tankman.role = "":
+                    if tankman.role == "":
                         # Situational Awareness Skill
                         situational_skill = 0
                         view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
@@ -217,6 +217,9 @@ class _CurrentVehicle(object):
             tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
             tank = { tank_name: tank_data }
             xvm_conf["minimap"]["circles"]["special"].append(tank)
+
+        # Check for Binoculars and add major circle (Hack due to only one circle allowed per vehicle)
+        binoculars = False
 
         # Write result
         f = codecs.open(os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc', 'w', '"utf-8-sig"')
