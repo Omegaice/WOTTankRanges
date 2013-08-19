@@ -279,7 +279,6 @@ class _CurrentVehicle(object):
         self.item = yield self.__requestVehicleItem(currentId)
         self.onChanged()
         self.firstTimeInitialized = True
-        LOG_NOTE('Vehicle Get From Server. %s', self.__vehicle)
         callback(True)
         return
 
