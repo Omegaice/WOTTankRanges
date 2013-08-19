@@ -142,107 +142,110 @@ class _CurrentVehicle(object):
                 self.__clanLock = clanNewbeLock
             self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
-        # Get name
-        tank_name = self.__vehicle.descriptor.type.name.split(":")[1].lower().replace("-","_")
-        LOG_NOTE("Tank Name: ", tank_name)
+        configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc'
 
-        # Get view distance
-        view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
-        LOG_NOTE("Base View Range: ", view_distance)
+        # Check configuration file exists
+        if not os.path.exists(configuration_file):
+            LOG_NOTE("XVM Configuration file missing (" + configuration_file + ")")
+        else:
+            # Load Configuration
+            data = ""
+            f = codecs.open(configuration_file, 'r', '"utf-8-sig"')
+            for line in f.read().split('\n'):
+                if line.find("//") == -1 or line.find("http") != -1:
+                    data += line + '\n'
+            f.close()
 
-        # Check for Binoculars
-        binoculars = False
+            start = data.find("/*")
+            if start != -1:
+                end = data.find("*/")
+                data = data[0:start] + data[end+3:]
 
-        # Check for Coated Optics
-        coated_optics = False
+            xvm_conf = json.loads(data)
 
-        # Check for Ventilation
-        ventilation = False
+            # Get name
+            tank_name = self.__vehicle.descriptor.type.name.split(":")[1].lower().replace("-","_")
+            LOG_NOTE("Tank Name: ", tank_name)
 
-        # Check for Consumable
-        consumable = False
+            # Get view distance
+            view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
+            LOG_NOTE("Base View Range: ", view_distance)
 
-        # Check for Brothers In Arms
-        brothers_in_arms = False
+            # Check for Binoculars
+            binoculars = False
 
-        # Get crew
-        tankmen = yield Requester('tankman').getFromInventory()
-        for tankman in tankmen:
-            for i in range(len(self.__vehicle.crew)):
-                if self.__vehicle.crew[i] == tankman.inventoryId:
-                    if tankman.role == "Commander":
-                        # Major Role Skill
-                        major_skill = tankman.roleLevel
-                        if brothers_in_arms == True:
-                            major_skill += 5
-                        if ventilation == True:
-                            major_skill += 5
-                        if consumable == True:
-                            major_skill += 10
+            # Check for Coated Optics
+            coated_optics = False
 
-                        view_distance *= (major_skill / 100.0)
+            # Check for Ventilation
+            ventilation = False
 
-                        # Recon Skill
-                        recon_skill = 0
-                        view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
-                    if tankman.role == "":
-                        # Situational Awareness Skill
-                        situational_skill = 0
-                        view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
+            # Check for Consumable
+            consumable = False
 
-        LOG_NOTE("Scaled View Range: ", view_distance)
+            # Check for Brothers In Arms
+            brothers_in_arms = False
 
-        # Load Configuration
-        data = ""
-        f = codecs.open(os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc', 'r', '"utf-8-sig"')
-        for line in f.read().split('\n'):
-            if line.find("//") == -1 or line.find("http") != -1:
-                data += line + '\n'
-        f.close()
+            # Get crew
+            tankmen = yield Requester('tankman').getFromInventory()
+            for tankman in tankmen:
+                for i in range(len(self.__vehicle.crew)):
+                    if self.__vehicle.crew[i] == tankman.inventoryId:
+                        if tankman.role == "Commander":
+                            # Major Role Skill
+                            major_skill = tankman.roleLevel
+                            if brothers_in_arms == True:
+                                major_skill += 5
+                            if ventilation == True:
+                                major_skill += 5
+                            if consumable == True:
+                                major_skill += 10
 
-        start = data.find("/*")
-        if start != -1:
-            end = data.find("*/")
-            data = data[0:start] + data[end+3:]
+                            view_distance *= (major_skill / 100.0)
 
-        xvm_conf = json.loads(data)
+                            # Recon Skill
+                            recon_skill = 0
+                            view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
+                        if tankman.role == "":
+                            # Situational Awareness Skill
+                            situational_skill = 0
+                            view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
 
-        # Make sure we have the correct minimap entries
-        if not "minimap" in xvm_conf:
-            print "Missing Minimap"
-            xvm_conf["minimap"] = { "enabled": True }
+            LOG_NOTE("Scaled View Range: ", view_distance)
 
-        if not "circles" in xvm_conf["minimap"]:
-            print "Missing Circles"
-            xvm_conf["minimap"]["circles"] = {}
+            # Make sure we have the correct minimap entries
+            if not "minimap" in xvm_conf:
+                xvm_conf["minimap"] = { "enabled": True }
 
-        if not "special" in xvm_conf["minimap"]["circles"]:
-            print "Missing Special"
-            xvm_conf["minimap"]["circles"]["special"] = {}
+            if not "circles" in xvm_conf["minimap"]:
+                xvm_conf["minimap"]["circles"] = {}
 
-        # Remove current circles
-        remaining = []
-        for tank_data in xvm_conf["minimap"]["circles"]["special"]:
-            if tank_data.keys()[0] != tank_name:
-                remaining.append(tank_data)
-        xvm_conf["minimap"]["circles"]["special"] = remaining
+            if not "special" in xvm_conf["minimap"]["circles"]:
+                xvm_conf["minimap"]["circles"]["special"] = {}
 
-        if binoculars == True:
-            tank_data = { "color": "0xFFFFFF", "distance": view_distance * 1.25, "alpha": 25, "enabled": True, "thickness": 0.5}
+            # Remove current circles
+            remaining = []
+            for tank_data in xvm_conf["minimap"]["circles"]["special"]:
+                if tank_data.keys()[0] != tank_name:
+                    remaining.append(tank_data)
+            xvm_conf["minimap"]["circles"]["special"] = remaining
+
+            if binoculars == True:
+                tank_data = { "color": "0xFFFFFF", "distance": view_distance * 1.25, "alpha": 25, "enabled": True, "thickness": 0.5}
+                tank = { tank_name: tank_data }
+                xvm_conf["minimap"]["circles"]["special"].append(tank)
+
+            if coated_optics == True:
+                view_distance *= 1.1
+
+            tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
             tank = { tank_name: tank_data }
             xvm_conf["minimap"]["circles"]["special"].append(tank)
 
-        if coated_optics == True:
-            view_distance *= 1.1
-
-        tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
-        tank = { tank_name: tank_data }
-        xvm_conf["minimap"]["circles"]["special"].append(tank)
-
-        # Write result
-        f = codecs.open(os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc', 'w', '"utf-8-sig"')
-        f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
-        f.close()
+            # Write result
+            f = codecs.open(configuration_file, 'w', '"utf-8-sig"')
+            f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
+            f.close()
 
         return
 
