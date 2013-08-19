@@ -2,3 +2,4 @@ client
 *.pyc
 *.zip
 *.xc
+test.py
