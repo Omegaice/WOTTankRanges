@@ -1,2 +1,4 @@
 client
 *.pyc
+*.zip
+*.xc
