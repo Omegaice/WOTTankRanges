@@ -208,10 +208,11 @@ class _CurrentVehicle(object):
         xvm_conf = json.loads(data)
 
         # Remove current circles
-        def f(x): return x[0] != tank_name
+        remaining = []
         for tank_data in xvm_conf["minimap"]["circles"]["special"]:
-            if tank_data.keys()[0] == tank_name:
-                xvm_conf["minimap"]["circles"]["special"].pop(tank_data)
+            if tank_data.keys()[0] != tank_name:
+                remaining.append(tank_data)
+        xvm_conf["minimap"]["circles"]["special"] = remaining
 
         if binoculars == True:
             tank_data = { "color": "0xFFFFFF", "distance": view_distance * 1.25, "alpha": 25, "enabled": True, "thickness": 0.5}
