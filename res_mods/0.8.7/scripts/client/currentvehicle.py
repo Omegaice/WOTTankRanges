@@ -207,6 +207,19 @@ class _CurrentVehicle(object):
 
         xvm_conf = json.loads(data)
 
+        # Make sure we have the correct minimap entries
+        if not "minimap" in xvm_conf:
+            print "Missing Minimap"
+            xvm_conf["minimap"] = { "enabled": True }
+
+        if not "circles" in xvm_conf["minimap"]:
+            print "Missing Circles"
+            xvm_conf["minimap"]["circles"] = {}
+
+        if not "special" in xvm_conf["minimap"]["circles"]:
+            print "Missing Special"
+            xvm_conf["minimap"]["circles"]["special"] = {}
+
         # Remove current circles
         remaining = []
         for tank_data in xvm_conf["minimap"]["circles"]["special"]:
