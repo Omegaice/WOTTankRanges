@@ -215,12 +215,13 @@ class _CurrentVehicle(object):
                                 # Recon Skill
                                 recon_skill = 0
 
-                                training_skill = tankman.descriptor.skills.pop()
-                                if training_skill == "commander_eagleEye":
-                                    recon_skill = tankman.descriptor.lastSkillLevel
-                                else:
-                                    if "commander_eagleEye" in tankman.descriptor.skills:
-                                        recon_skill = 100
+                                if len(tankman.descriptor.skills) > 0:
+                                    training_skill = tankman.descriptor.skills.pop()
+                                    if training_skill == "commander_eagleEye":
+                                        recon_skill = tankman.descriptor.lastSkillLevel
+                                    else:
+                                        if "commander_eagleEye" in tankman.descriptor.skills:
+                                            recon_skill = 100
 
                                 LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
                                 view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
