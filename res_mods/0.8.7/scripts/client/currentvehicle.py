@@ -162,12 +162,6 @@ class _CurrentVehicle(object):
                 view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
                 LOG_NOTE("Base View Range: ", view_distance)
 
-                # Check for Binoculars
-                binoculars = False
-
-                # Check for Coated Optics
-                coated_optics = False
-
                 # Check for Ventilation
                 ventilation = False
 
@@ -194,24 +188,29 @@ class _CurrentVehicle(object):
                                         brothers_in_arms = False
                                         break
 
-                # Calculate role and class skills
+                # Calculate commander bonus
+                commander_skill = 0
                 for tankman in barracks_crew:
                     for i in range(len(self.__vehicle.crew)):
                         if self.__vehicle.crew[i] == tankman.inventoryId:
                             if tankman.role == "Commander":
                                 # Major Role Skill
-                                major_skill = tankman.roleLevel
+                                commander_skill = tankman.roleLevel
                                 if brothers_in_arms == True:
-                                    major_skill += 5
+                                    commander_skill += 5
                                 if ventilation == True:
-                                    major_skill += 5
+                                    commander_skill += 5
                                 if consumable == True:
-                                    major_skill += 10
+                                    commander_skill += 10
 
-                                LOG_NOTE("Commander Bonus: ", (major_skill / 100.0))
-                                view_distance *= (major_skill / 100.0)
-                                LOG_NOTE("After Commander Skill View Range: ", view_distance)
+                                LOG_NOTE("Commander Skill: ", commander_skill)
 
+                # Calculate role and class skills
+                other_bonus = 1.0
+                for tankman in barracks_crew:
+                    for i in range(len(self.__vehicle.crew)):
+                        if self.__vehicle.crew[i] == tankman.inventoryId:
+                            if tankman.role == "Commander":
                                 # Recon Skill
                                 recon_skill = 0
 
@@ -224,17 +223,23 @@ class _CurrentVehicle(object):
                                             recon_skill = 100
 
                                 LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
-                                view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
-                                LOG_NOTE("After Recon View Range: ", view_distance)
+                                other_bonus *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
                             if tankman.role == "":
                                 # Situational Awareness Skill
                                 situational_skill = 0
 
-
                                 LOG_NOTE("Situational Awareness Bonus: ", 1.0 + (( 0.03 * situational_skill ) / 100.0))
-                                view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
-                                LOG_NOTE("After Situational Awareness View Range: ", view_distance)
+                                other_bonus *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
 
+                # Check for Binoculars
+                binoculars = False
+
+                # Check for Coated Optics
+                coated_optics = False
+
+                LOG_NOTE("Other Bonus:", other_bonus)
+
+                view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
                 LOG_NOTE("Final View Range: ", view_distance)
 
                 # Load Configuration
