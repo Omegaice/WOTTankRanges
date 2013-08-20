@@ -10,6 +10,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.gui_items import FittingItem
 from debug_utils import *
 import io, os, json, codecs
+from items import tankmen
 
 class _CurrentVehicle(object):
 
@@ -153,7 +154,8 @@ class _CurrentVehicle(object):
             LOG_NOTE("Tank Name: ", tank_name)
 
             # Get type
-            if 'SPG' in self.__vehicle.descriptor.type.tags:
+            spg_test = False
+            if spg_test and 'SPG' in self.__vehicle.descriptor.type.tags:
                 LOG_NOTE("Ignoring SPG Tank")
             else:
                 # Get view distance
@@ -172,12 +174,28 @@ class _CurrentVehicle(object):
                 # Check for Consumable
                 consumable = False
 
-                # Check for Brothers In Arms
-                brothers_in_arms = False
-
                 # Get crew
-                tankmen = yield Requester('tankman').getFromInventory()
-                for tankman in tankmen:
+                barracks_crew = yield Requester('tankman').getFromInventory()
+
+                # Check for Brothers In Arms
+                brothers_in_arms = True
+                for tankman in barracks_crew:
+                    for i in range(len(self.__vehicle.crew)):
+                        if self.__vehicle.crew[i] == tankman.inventoryId:
+                            if not "brotherhood" in tankman.descriptor.skills:
+                                brothers_in_arms = False
+                                break
+                            else:
+                                bia_skill = 0
+
+                                training_skill = tankman.descriptor.skills.pop()
+                                if training_skill == "brotherhood":
+                                    if tankman.descriptor.lastSkillLevel != 100:
+                                        brothers_in_arms = False
+                                        break
+
+                # Calculate role and class skills
+                for tankman in barracks_crew:
                     for i in range(len(self.__vehicle.crew)):
                         if self.__vehicle.crew[i] == tankman.inventoryId:
                             if tankman.role == "Commander":
@@ -190,17 +208,33 @@ class _CurrentVehicle(object):
                                 if consumable == True:
                                     major_skill += 10
 
+                                LOG_NOTE("Commander Bonus: ", (major_skill / 100.0))
                                 view_distance *= (major_skill / 100.0)
+                                LOG_NOTE("After Commander Skill View Range: ", view_distance)
 
                                 # Recon Skill
                                 recon_skill = 0
+
+                                training_skill = tankman.descriptor.skills.pop()
+                                if training_skill == "commander_eagleEye":
+                                    recon_skill = tankman.descriptor.lastSkillLevel
+                                else:
+                                    if "commander_eagleEye" in tankman.descriptor.skills:
+                                        recon_skill = 100
+
+                                LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
                                 view_distance *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
+                                LOG_NOTE("After Recon View Range: ", view_distance)
                             if tankman.role == "":
                                 # Situational Awareness Skill
                                 situational_skill = 0
-                                view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
 
-                LOG_NOTE("Scaled View Range: ", view_distance)
+
+                                LOG_NOTE("Situational Awareness Bonus: ", 1.0 + (( 0.03 * situational_skill ) / 100.0))
+                                view_distance *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
+                                LOG_NOTE("After Situational Awareness View Range: ", view_distance)
+
+                LOG_NOTE("Final View Range: ", view_distance)
 
                 # Load Configuration
                 data = ""
