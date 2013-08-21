@@ -281,11 +281,13 @@ class _CurrentVehicle(object):
 				data += line + '\n'
 		f.close()
 
+		# Remove comments
 		start = data.find("/*")
 		if start != -1:
 			end = data.find("*/")
 			data = data[0:start] + data[end+3:]
 
+		# Parse configuration
 		xvm_conf = json.loads(data)
 
 		# Make sure we have the correct minimap entries
