@@ -143,153 +143,155 @@ class _CurrentVehicle(object):
                 self.__clanLock = clanNewbeLock
             self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
-        configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc'
+        xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc'
 
         # Check configuration file exists
-        if not os.path.exists(configuration_file):
-            LOG_NOTE("XVM Configuration file missing (" + configuration_file + ")")
-        else:
-            # Get name
-            tank_name = self.__vehicle.descriptor.type.name.split(":")[1].lower().replace("-","_")
-            LOG_NOTE("Tank Name: ", tank_name)
+        if not os.path.exists(xvm_configuration_file):
+            LOG_NOTE("XVM Configuration file missing (" + xvm_configuration_file + ")")
+            return
 
-            # Get type
-            spg_test = False
-            if spg_test and 'SPG' in self.__vehicle.descriptor.type.tags:
-                LOG_NOTE("Ignoring SPG Tank")
-            else:
-                # Get view distance
-                view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
-                LOG_NOTE("Base View Range: ", view_distance)
+        # Get name
+        tank_name = self.__vehicle.descriptor.type.name.split(":")[1].lower().replace("-","_")
+        LOG_NOTE("Tank Name: ", tank_name)
 
-                # Check for Ventilation
-                ventilation = False
+        # Get type
+        spg_test = False
+        if spg_test and 'SPG' in self.__vehicle.descriptor.type.tags:
+            LOG_NOTE("Ignoring SPG Tank")
+            return
 
-                # Check for Consumable
-                consumable = False
+        # Get view distance
+        view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
+        LOG_NOTE("Base View Range: ", view_distance)
 
-                # Get crew
-                barracks_crew = yield Requester('tankman').getFromInventory()
+        # Check for Ventilation
+        ventilation = False
 
-                # Check for Brothers In Arms
-                brothers_in_arms = True
-                for tankman in barracks_crew:
-                    for i in range(len(self.__vehicle.crew)):
-                        if self.__vehicle.crew[i] == tankman.inventoryId:
-                            if not "brotherhood" in tankman.descriptor.skills:
+        # Check for Consumable
+        consumable = False
+
+        # Get crew
+        barracks_crew = yield Requester('tankman').getFromInventory()
+
+        # Check for Brothers In Arms
+        brothers_in_arms = True
+        for tankman in barracks_crew:
+            for i in range(len(self.__vehicle.crew)):
+                if self.__vehicle.crew[i] == tankman.inventoryId:
+                    if not "brotherhood" in tankman.descriptor.skills:
+                        brothers_in_arms = False
+                        break
+                    else:
+                        bia_skill = 0
+
+                        training_skill = tankman.descriptor.skills.pop()
+                        if training_skill == "brotherhood":
+                            if tankman.descriptor.lastSkillLevel != 100:
                                 brothers_in_arms = False
                                 break
+
+        # Calculate commander bonus
+        commander_skill = 0
+        for tankman in barracks_crew:
+            for i in range(len(self.__vehicle.crew)):
+                if self.__vehicle.crew[i] == tankman.inventoryId:
+                    if tankman.role == "Commander":
+                        # Major Role Skill
+                        commander_skill = tankman.roleLevel
+                        if brothers_in_arms == True:
+                            commander_skill += 5
+                        if ventilation == True:
+                            commander_skill += 5
+                        if consumable == True:
+                            commander_skill += 10
+
+                        LOG_NOTE("Commander Skill: ", commander_skill)
+
+        # Calculate role and class skills
+        other_bonus = 1.0
+        for tankman in barracks_crew:
+            for i in range(len(self.__vehicle.crew)):
+                if self.__vehicle.crew[i] == tankman.inventoryId:
+                    if tankman.role == "Commander":
+                        # Recon Skill
+                        recon_skill = 0
+
+                        if len(tankman.descriptor.skills) > 0:
+                            training_skill = tankman.descriptor.skills.pop()
+                            if training_skill == "commander_eagleEye":
+                                recon_skill = tankman.descriptor.lastSkillLevel
                             else:
-                                bia_skill = 0
+                                if "commander_eagleEye" in tankman.descriptor.skills:
+                                    recon_skill = 100
 
-                                training_skill = tankman.descriptor.skills.pop()
-                                if training_skill == "brotherhood":
-                                    if tankman.descriptor.lastSkillLevel != 100:
-                                        brothers_in_arms = False
-                                        break
+                        LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
+                        other_bonus *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
+                    if tankman.role == "":
+                        # Situational Awareness Skill
+                        situational_skill = 0
 
-                # Calculate commander bonus
-                commander_skill = 0
-                for tankman in barracks_crew:
-                    for i in range(len(self.__vehicle.crew)):
-                        if self.__vehicle.crew[i] == tankman.inventoryId:
-                            if tankman.role == "Commander":
-                                # Major Role Skill
-                                commander_skill = tankman.roleLevel
-                                if brothers_in_arms == True:
-                                    commander_skill += 5
-                                if ventilation == True:
-                                    commander_skill += 5
-                                if consumable == True:
-                                    commander_skill += 10
+                        LOG_NOTE("Situational Awareness Bonus: ", 1.0 + (( 0.03 * situational_skill ) / 100.0))
+                        other_bonus *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
 
-                                LOG_NOTE("Commander Skill: ", commander_skill)
+        # Check for Binoculars
+        binoculars = False
 
-                # Calculate role and class skills
-                other_bonus = 1.0
-                for tankman in barracks_crew:
-                    for i in range(len(self.__vehicle.crew)):
-                        if self.__vehicle.crew[i] == tankman.inventoryId:
-                            if tankman.role == "Commander":
-                                # Recon Skill
-                                recon_skill = 0
+        # Check for Coated Optics
+        coated_optics = False
 
-                                if len(tankman.descriptor.skills) > 0:
-                                    training_skill = tankman.descriptor.skills.pop()
-                                    if training_skill == "commander_eagleEye":
-                                        recon_skill = tankman.descriptor.lastSkillLevel
-                                    else:
-                                        if "commander_eagleEye" in tankman.descriptor.skills:
-                                            recon_skill = 100
+        LOG_NOTE("Other Bonus:", other_bonus)
 
-                                LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
-                                other_bonus *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
-                            if tankman.role == "":
-                                # Situational Awareness Skill
-                                situational_skill = 0
+        view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
+        LOG_NOTE("Final View Range: ", view_distance)
 
-                                LOG_NOTE("Situational Awareness Bonus: ", 1.0 + (( 0.03 * situational_skill ) / 100.0))
-                                other_bonus *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
+        # Load Configuration
+        data = ""
+        f = codecs.open(xvm_configuration_file, 'r', '"utf-8-sig"')
+        for line in f.read().split('\n'):
+            if line.find("//") == -1 or line.find("http") != -1:
+                data += line + '\n'
+        f.close()
 
-                # Check for Binoculars
-                binoculars = False
+        start = data.find("/*")
+        if start != -1:
+            end = data.find("*/")
+            data = data[0:start] + data[end+3:]
 
-                # Check for Coated Optics
-                coated_optics = False
+        xvm_conf = json.loads(data)
 
-                LOG_NOTE("Other Bonus:", other_bonus)
+        # Make sure we have the correct minimap entries
+        if not "minimap" in xvm_conf:
+            xvm_conf["minimap"] = { "enabled": True }
 
-                view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
-                LOG_NOTE("Final View Range: ", view_distance)
+        if not "circles" in xvm_conf["minimap"]:
+            xvm_conf["minimap"]["circles"] = {}
 
-                # Load Configuration
-                data = ""
-                f = codecs.open(configuration_file, 'r', '"utf-8-sig"')
-                for line in f.read().split('\n'):
-                    if line.find("//") == -1 or line.find("http") != -1:
-                        data += line + '\n'
-                f.close()
+        if not "special" in xvm_conf["minimap"]["circles"]:
+            xvm_conf["minimap"]["circles"]["special"] = {}
 
-                start = data.find("/*")
-                if start != -1:
-                    end = data.find("*/")
-                    data = data[0:start] + data[end+3:]
+        # Remove current circles
+        remaining = []
+        for tank_data in xvm_conf["minimap"]["circles"]["special"]:
+            if tank_data.keys()[0] != tank_name:
+                remaining.append(tank_data)
+        xvm_conf["minimap"]["circles"]["special"] = remaining
 
-                xvm_conf = json.loads(data)
+        if binoculars == True:
+            tank_data = { "color": "0xFFFFFF", "distance": view_distance * 1.25, "alpha": 25, "enabled": True, "thickness": 0.5}
+            tank = { tank_name: tank_data }
+            xvm_conf["minimap"]["circles"]["special"].append(tank)
 
-                # Make sure we have the correct minimap entries
-                if not "minimap" in xvm_conf:
-                    xvm_conf["minimap"] = { "enabled": True }
+        if coated_optics == True:
+            view_distance *= 1.1
 
-                if not "circles" in xvm_conf["minimap"]:
-                    xvm_conf["minimap"]["circles"] = {}
+        tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
+        tank = { tank_name: tank_data }
+        xvm_conf["minimap"]["circles"]["special"].append(tank)
 
-                if not "special" in xvm_conf["minimap"]["circles"]:
-                    xvm_conf["minimap"]["circles"]["special"] = {}
-
-                # Remove current circles
-                remaining = []
-                for tank_data in xvm_conf["minimap"]["circles"]["special"]:
-                    if tank_data.keys()[0] != tank_name:
-                        remaining.append(tank_data)
-                xvm_conf["minimap"]["circles"]["special"] = remaining
-
-                if binoculars == True:
-                    tank_data = { "color": "0xFFFFFF", "distance": view_distance * 1.25, "alpha": 25, "enabled": True, "thickness": 0.5}
-                    tank = { tank_name: tank_data }
-                    xvm_conf["minimap"]["circles"]["special"].append(tank)
-
-                if coated_optics == True:
-                    view_distance *= 1.1
-
-                tank_data = { "color": "0xFFFFFF", "distance": view_distance, "alpha": 50, "enabled": True, "thickness": 0.5}
-                tank = { tank_name: tank_data }
-                xvm_conf["minimap"]["circles"]["special"].append(tank)
-
-                # Write result
-                f = codecs.open(configuration_file, 'w', '"utf-8-sig"')
-                f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
-                f.close()
+        # Write result
+        f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
+        f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
+        f.close()
 
         return
 
