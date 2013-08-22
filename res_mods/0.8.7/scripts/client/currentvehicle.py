@@ -187,6 +187,9 @@ class _CurrentVehicle(object):
 
 		# Check for Ventilation
 		ventilation = False
+		for item in self.__vehicle.descriptor.optionalDevices:
+			if "improvedVentilation" in item.name:
+				ventilation = True
 
 		# Check for Consumable
 		consumable = False
