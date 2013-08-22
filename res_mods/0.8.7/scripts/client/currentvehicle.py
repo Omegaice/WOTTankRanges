@@ -250,9 +250,16 @@ class _CurrentVehicle(object):
 
 						if logging:
 							LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
-					if tankman.role == "":
+					if tankman.role == "Radio Operator":
 						# Situational Awareness Skill
 						situational_skill = 0
+						if len(tankman.descriptor.skills) > 0:
+							training_skill = tankman.descriptor.skills.pop()
+							if training_skill == "radioman_finder":
+								situational_skill = tankman.descriptor.lastSkillLevel
+							else:
+								if "radioman_finder" in tankman.descriptor.skills:
+									situational_skill = 100
 
 						# Append Skill
 						other_bonus *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
