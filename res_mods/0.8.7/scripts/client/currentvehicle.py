@@ -249,7 +249,7 @@ class _CurrentVehicle(object):
 						other_bonus *= 1.0 + ( 0.0002 * recon_skill )
 
 						if logging:
-							LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * recon_skill )
+							LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * recon_skill ))
 					if tankman.role == "Radio Operator":
 						# Situational Awareness Skill
 						situational_skill = 0
@@ -269,6 +269,9 @@ class _CurrentVehicle(object):
 
 		# Check for Binoculars
 		binoculars = False
+		for item in self.__vehicle.descriptor.optionalDevices:
+			if item.name == "stereoscope":
+				binoculars = True
 
 		# Check for Coated Optics
 		coated_optics = False
