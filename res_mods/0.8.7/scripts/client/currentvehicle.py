@@ -329,12 +329,12 @@ class _CurrentVehicle(object):
 		xvm_conf["minimap"]["circles"]["special"] = remaining
 
 		if binoculars == True:
-			tank_data = { "enabled": True, "distance": view_distance * 1.25, "color": binocular_circle_color, "alpha": binocular_circle_alpha, "thickness": binocular_circle_thickness}
+			tank_data = { "enabled": True, "distance": min(view_distance * 1.25, 500), "color": binocular_circle_color, "alpha": binocular_circle_alpha, "thickness": binocular_circle_thickness}
 			tank = { tank_name: tank_data }
 			xvm_conf["minimap"]["circles"]["special"].append(tank)
 
 		if coated_optics == True:
-			view_distance *= 1.1
+			view_distance = min(view_distance * 1.1, 500)
 
 		tank_data = { "enabled": True, "distance": view_distance, "color": view_circle_color, "alpha": view_circle_alpha, "thickness": view_circle_thickness}
 		tank = { tank_name: tank_data }
