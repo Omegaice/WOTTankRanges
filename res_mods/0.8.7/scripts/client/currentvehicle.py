@@ -246,10 +246,10 @@ class _CurrentVehicle(object):
 									recon_skill = 100
 
 						# Append skill
-						other_bonus *= 1.0 + (( 0.02 * recon_skill ) / 100.0)
+						other_bonus *= 1.0 + ( 0.0002 * recon_skill )
 
 						if logging:
-							LOG_NOTE("Recon Bonus: ", 1.0 + (( 0.02 * recon_skill ) / 100.0))
+							LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * recon_skill )
 					if tankman.role == "Radio Operator":
 						# Situational Awareness Skill
 						situational_skill = 0
@@ -262,10 +262,10 @@ class _CurrentVehicle(object):
 									situational_skill = 100
 
 						# Append Skill
-						other_bonus *= 1.0 + (( 0.03 * situational_skill ) / 100.0)
+						other_bonus *= 1.0 + ( 0.0003 * situational_skill )
 
 						if logging:
-							LOG_NOTE("Situational Awareness Bonus: ", 1.0 + (( 0.03 * situational_skill ) / 100.0))
+							LOG_NOTE("Situational Awareness Bonus: ", 1.0 + ( 0.0003 * situational_skill ))
 
 		# Check for Binoculars
 		binoculars = False
