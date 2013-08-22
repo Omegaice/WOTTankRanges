@@ -283,6 +283,9 @@ class _CurrentVehicle(object):
 
 		# Check for Coated Optics
 		coated_optics = False
+		for item in self.__vehicle.descriptor.optionalDevices:
+			if item is not None and item.name == "coatedOptics":
+				coated_optics = True
 
 		# Calculate final value
 		view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
