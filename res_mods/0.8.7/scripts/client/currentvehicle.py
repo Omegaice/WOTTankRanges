@@ -126,7 +126,7 @@ class _CurrentVehicle(object):
 	@process
 	def __request(self, inventoryId):
 		Waiting.show('updateCurrentVehicle', True)
-		from gui.Scaleform.utils.requesters import Requester, StatsRequester
+		from gui.Scaleform.utils.requesters import Requester, StatsRequester, VehicleItemsRequester
 		vehicles = yield Requester('vehicle').getFromInventory()
 		vehicleTypeLocks = yield StatsRequester().getVehicleTypeLocks()
 		globalVehicleLocks = yield StatsRequester().getGlobalVehicleLocks()
@@ -188,11 +188,16 @@ class _CurrentVehicle(object):
 		# Check for Ventilation
 		ventilation = False
 		for item in self.__vehicle.descriptor.optionalDevices:
-			if "improvedVentilation" in item.name:
+			if item is not None and "improvedVentilation" in item.name:
 				ventilation = True
 
 		# Check for Consumable
 		consumable = False
+		for mounted in self.__vehicle.equipments:
+			for item in VehicleItemsRequester(vehicles).getItems(['equipment']):
+				if item.compactDescr == mounted and item.descriptor is not None:
+					if "ration" in item.descriptor.name:
+						consumable = True
 
 		# Get crew
 		barracks_crew = yield Requester('tankman').getFromInventory()
@@ -273,7 +278,7 @@ class _CurrentVehicle(object):
 		# Check for Binoculars
 		binoculars = False
 		for item in self.__vehicle.descriptor.optionalDevices:
-			if item.name == "stereoscope":
+			if item is not None and item.name == "stereoscope":
 				binoculars = True
 
 		# Check for Coated Optics
