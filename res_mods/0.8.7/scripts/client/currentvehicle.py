@@ -143,19 +143,11 @@ class _CurrentVehicle(object):
 				self.__clanLock = clanNewbeLock
 			self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
-		self.__updateViewRange()
-
-		return
-
-	def __updateViewRange(self):
-		# Load configuration
-		xvm_conf = json.loads("{}")
-
-		xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
-		if not os.path.exists(xvm_configuration_file):
-			xvm_conf["tankrange"] = {
+		# Set Defaults
+		xvm_conf = {
+			"tankrange": {
 				"logging": True,
-				"ignore_artillery": True,
+				"ignore_artillery": False,
 
 				"view_circle": {
 					"enabled": True,
@@ -170,7 +162,11 @@ class _CurrentVehicle(object):
 					"thickness": 0.5
 				}
 			}
+		}
 
+		# Load configuration
+		xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
+		if not os.path.exists(xvm_configuration_file):
 			if xvm_conf["tankrange"]["logging"]:
 				LOG_NOTE("Configuration file missing (" + xvm_configuration_file + "). Creating.")
 		else:
@@ -245,7 +241,7 @@ class _CurrentVehicle(object):
 		xvm_conf["circles"]["special"] = remaining
 
 		# Get type
-		if not xvm_conf["tankrange"]["ignore_artillery"] and 'SPG' in self.__vehicle.descriptor.type.tags:
+		if xvm_conf["tankrange"]["ignore_artillery"] and 'SPG' in self.__vehicle.descriptor.type.tags:
 			if xvm_conf["tankrange"]["logging"]:
 				LOG_NOTE("Ignoring SPG Tank")
 
@@ -267,6 +263,8 @@ class _CurrentVehicle(object):
 				ventilation = True
 
 		# Check for Consumable
+		vehicles = yield Requester('vehicle').getFromInventory()
+
 		consumable = False
 		for mounted in self.__vehicle.equipments:
 			for item in VehicleItemsRequester(vehicles).getItems(['equipment']):
@@ -275,7 +273,7 @@ class _CurrentVehicle(object):
 						consumable = True
 
 		# Get crew
-		barracks_crew = Requester('tankman').getFromInventory()
+		barracks_crew = yield Requester('tankman').getFromInventory()
 
 		# Check for Brothers In Arms
 		brothers_in_arms = True
@@ -388,6 +386,8 @@ class _CurrentVehicle(object):
 		f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
 		f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
 		f.close()
+
+		return
 
 	def __changeDone(self):
 		self.__changeCallbackID = None
