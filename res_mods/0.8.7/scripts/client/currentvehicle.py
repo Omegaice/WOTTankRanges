@@ -275,7 +275,7 @@ class _CurrentVehicle(object):
 						consumable = True
 
 		# Get crew
-		barracks_crew = yield Requester('tankman').getFromInventory()
+		barracks_crew = Requester('tankman').getFromInventory()
 
 		# Check for Brothers In Arms
 		brothers_in_arms = True
