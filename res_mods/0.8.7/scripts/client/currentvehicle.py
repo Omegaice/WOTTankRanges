@@ -143,6 +143,11 @@ class _CurrentVehicle(object):
 				self.__clanLock = clanNewbeLock
 			self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
+		self.__updateViewRange()
+
+		return
+
+	def __updateViewRange(self):
 		# Load configuration
 		xvm_conf = json.loads("{}")
 
@@ -383,8 +388,6 @@ class _CurrentVehicle(object):
 		f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
 		f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
 		f.close()
-
-		return
 
 	def __changeDone(self):
 		self.__changeCallbackID = None
