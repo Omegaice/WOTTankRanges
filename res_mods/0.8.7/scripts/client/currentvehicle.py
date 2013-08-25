@@ -225,6 +225,12 @@ class _CurrentVehicle(object):
 		if not "circles" in xvm_conf:
 			xvm_conf["circles"] = { "enabled": True }
 
+		if not "major" in xvm_conf["circles"]:
+			xvm_conf["circles"]["major"] = [
+				{ "enabled": False, "distance": 445, "thickness": 0.75, "alpha": 45, "color": "0xFFCC66" },
+				{ "enabled": False, "distance": 50, "thickness": 1.00, "alpha": 100, "color": "0xFFFFFF" }
+			]
+
 		if not "special" in xvm_conf["circles"]:
 			xvm_conf["circles"]["special"] = {}
 
