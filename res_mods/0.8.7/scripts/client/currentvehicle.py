@@ -368,7 +368,7 @@ class _CurrentVehicle(object):
 			LOG_NOTE("Final View Range: ", view_distance)
 
 		# Add binocular Circles
-		if xvm_conf["tankrange"]["binocular_circle"]["enabled"]:
+		if xvm_conf["tankrange"]["binocular_circle"]["enabled"] and binoculars:
 			tank_data = { "enabled": True, "distance": min(view_distance * 1.25, 500), "color": xvm_conf["tankrange"]["binocular_circle"]["color"], "alpha": xvm_conf["tankrange"]["binocular_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["binocular_circle"]["thickness"]}
 			tank = { tank_name: tank_data }
 			xvm_conf["circles"]["special"].append(tank)
