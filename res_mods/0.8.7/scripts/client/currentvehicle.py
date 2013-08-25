@@ -143,46 +143,116 @@ class _CurrentVehicle(object):
 				self.__clanLock = clanNewbeLock
 			self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
-		# Default values
-		logging = True
+		# Load configuration
+		xvm_conf = json.loads("{}")
 
-		spg_test = False
-		binocular_test = True
-
-		view_circle_color = "0xFFFFFF"
-		view_circle_alpha = 50
-		view_circle_thickness = 0.5
-
-		binocular_circle_color = "0xFFFFFF"
-		binocular_circle_alpha = 25
-		binocular_circle_thickness = 0.5
-
-		# Check if mod configuration file exists
-		configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.conf'
-		if not os.path.exists(configuration_file):
-			LOG_NOTE("Tank Range Configuration file missing (" + configuration_file + "). Using default values.")
-
-		# Check xvm configuration file exists
-		xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'xvm.xc'
+		xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
 		if not os.path.exists(xvm_configuration_file):
-			if logging:
-				LOG_NOTE("XVM Configuration file missing (" + xvm_configuration_file + ")")
-			return
+			xvm_conf["tankrange"] = {
+				"logging": True,
+				"ignore_artillery": True,
+
+				"view_circle": {
+					"enabled": True,
+					"color": "0xFFFFFF",
+					"alpha": 50,
+					"thickness": 0.5
+				},
+				"binocular_circle": {
+					"enabled": True,
+					"color": "0xFFFFFF",
+					"alpha": 25,
+					"thickness": 0.5
+				}
+			}
+
+			if xvm_conf["tankrange"]["logging"]:
+				LOG_NOTE("Configuration file missing (" + xvm_configuration_file + "). Creating.")
+		else:
+			data = ""
+			blockComment = False
+
+			f = codecs.open(xvm_configuration_file, 'r', '"utf-8-sig"')
+			for line in f.read().split('\n'):
+				line = line.strip()
+				if line != "":
+					# Start of block comment
+					comment = line.find("/*")
+					if comment != -1 and comment == 0:
+						blockComment = True
+						continue
+
+					# End of block comment
+					comment = line.find("*/")
+					if comment != -1:
+						blockComment = False
+						continue
+
+					# Block Comment
+					if blockComment == True:
+						continue
+
+					# Start of line comment
+					comment = line.find("//")
+					if comment != -1 and comment == 0:
+						continue
+
+					# Remove end of line comments
+					position = 0
+					for i in range(0,line.count("//")):
+						comment = line.find("//", position+2)
+						if comment != -1:
+							colon = line.find(":")
+
+							startSpeach = line.find("\"", colon+1)
+							if startSpeach > comment:
+								line = line[:comment].strip()
+
+							endSpeach = line.find("\"", startSpeach+1)
+							if comment > endSpeach:
+								line = line[:comment].strip()
+
+						position += comment
+
+					if line != "":
+						data += line + '\n'
+			f.close()
+
+			xvm_conf = json.loads(data)
+
+		# Make sure we have the correct minimap entries
+		if not "circles" in xvm_conf:
+			xvm_conf["circles"] = { "enabled": True }
+
+		if not "special" in xvm_conf["circles"]:
+			xvm_conf["circles"]["special"] = {}
 
 		# Get name
 		tank_name = self.__vehicle.descriptor.type.name.split(":")[1].lower().replace("-","_")
-		if logging:
+		if xvm_conf["tankrange"]["logging"]:
 			LOG_NOTE("Tank Name: ", tank_name)
 
+		# Remove current circles
+		remaining = []
+		for tank_data in xvm_conf["circles"]["special"]:
+			if tank_data.keys()[0] != tank_name:
+				remaining.append(tank_data)
+		xvm_conf["circles"]["special"] = remaining
+
 		# Get type
-		if spg_test and 'SPG' in self.__vehicle.descriptor.type.tags:
-			if logging:
+		if not xvm_conf["tankrange"]["ignore_artillery"] and 'SPG' in self.__vehicle.descriptor.type.tags:
+			if xvm_conf["tankrange"]["logging"]:
 				LOG_NOTE("Ignoring SPG Tank")
+
+			# Write result
+			f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
+			f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
+			f.close()
 			return
 
 		# Get view distance
 		view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
-		if logging:
+		if xvm_conf["tankrange"]["logging"]:
 			LOG_NOTE("Base View Range: ", view_distance)
 
 		# Check for Ventilation
@@ -234,7 +304,7 @@ class _CurrentVehicle(object):
 						if consumable == True:
 							commander_skill += 10
 
-						if logging:
+						if xvm_conf["tankrange"]["logging"]:
 							LOG_NOTE("Commander Skill: ", commander_skill)
 
 		# Calculate role and class skills
@@ -256,7 +326,7 @@ class _CurrentVehicle(object):
 						# Append skill
 						other_bonus *= 1.0 + ( 0.0002 * recon_skill )
 
-						if logging:
+						if xvm_conf["tankrange"]["logging"]:
 							LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * recon_skill ))
 					if tankman.role == "Radio Operator":
 						# Situational Awareness Skill
@@ -272,7 +342,7 @@ class _CurrentVehicle(object):
 						# Append Skill
 						other_bonus *= 1.0 + ( 0.0003 * situational_skill )
 
-						if logging:
+						if xvm_conf["tankrange"]["logging"]:
 							LOG_NOTE("Situational Awareness Bonus: ", 1.0 + ( 0.0003 * situational_skill ))
 
 		# Check for Binoculars
@@ -290,55 +360,24 @@ class _CurrentVehicle(object):
 		# Calculate final value
 		view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
 
-		if logging:
+		if xvm_conf["tankrange"]["logging"]:
 			LOG_NOTE("Other Bonus:", other_bonus)
 			LOG_NOTE("Final View Range: ", view_distance)
 
-		# Load Configuration
-		data = ""
-		f = codecs.open(xvm_configuration_file, 'r', '"utf-8-sig"')
-		for line in f.read().split('\n'):
-			if line.find("//") == -1 or line.find("http") != -1:
-				data += line + '\n'
-		f.close()
-
-		# Remove comments
-		start = data.find("/*")
-		if start != -1:
-			end = data.find("*/")
-			data = data[0:start] + data[end+3:]
-
-		# Parse configuration
-		xvm_conf = json.loads(data)
-
-		# Make sure we have the correct minimap entries
-		if not "minimap" in xvm_conf:
-			xvm_conf["minimap"] = { "enabled": True }
-
-		if not "circles" in xvm_conf["minimap"]:
-			xvm_conf["minimap"]["circles"] = {}
-
-		if not "special" in xvm_conf["minimap"]["circles"]:
-			xvm_conf["minimap"]["circles"]["special"] = {}
-
-		# Remove current circles
-		remaining = []
-		for tank_data in xvm_conf["minimap"]["circles"]["special"]:
-			if tank_data.keys()[0] != tank_name:
-				remaining.append(tank_data)
-		xvm_conf["minimap"]["circles"]["special"] = remaining
-
-		if binoculars == True:
-			tank_data = { "enabled": True, "distance": min(view_distance * 1.25, 500), "color": binocular_circle_color, "alpha": binocular_circle_alpha, "thickness": binocular_circle_thickness}
+		# Add binocular Circles
+		if xvm_conf["tankrange"]["binocular_circle"]["enabled"]:
+			tank_data = { "enabled": True, "distance": min(view_distance * 1.25, 500), "color": xvm_conf["tankrange"]["binocular_circle"]["color"], "alpha": xvm_conf["tankrange"]["binocular_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["binocular_circle"]["thickness"]}
 			tank = { tank_name: tank_data }
-			xvm_conf["minimap"]["circles"]["special"].append(tank)
+			xvm_conf["circles"]["special"].append(tank)
 
+		# Add standard Circles
 		if coated_optics == True:
 			view_distance = min(view_distance * 1.1, 500)
 
-		tank_data = { "enabled": True, "distance": view_distance, "color": view_circle_color, "alpha": view_circle_alpha, "thickness": view_circle_thickness}
-		tank = { tank_name: tank_data }
-		xvm_conf["minimap"]["circles"]["special"].append(tank)
+		if xvm_conf["tankrange"]["view_circle"]["enabled"]:
+			tank_data = { "enabled": True, "distance": view_distance, "color": xvm_conf["tankrange"]["view_circle"]["color"], "alpha": xvm_conf["tankrange"]["view_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["view_circle"]["thickness"]}
+			tank = { tank_name: tank_data }
+			xvm_conf["circles"]["special"].append(tank)
 
 		# Write result
 		f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
