@@ -303,9 +303,9 @@ class _CurrentVehicle(object):
 		for tankman in barracks_crew:
 			for i in range(len(self.__vehicle.crew)):
 				if self.__vehicle.crew[i] == tankman.inventoryId:
-					if tankman.role == "Commander":
+					if tankman.descriptor.role == "commander":
 						# Major Role Skill
-						commander_skill = tankman.roleLevel
+						commander_skill = tankman.descriptor.roleLevel
 						if brothers_in_arms == True:
 							commander_skill += 5
 						if ventilation == True:
@@ -321,7 +321,7 @@ class _CurrentVehicle(object):
 		for tankman in barracks_crew:
 			for i in range(len(self.__vehicle.crew)):
 				if self.__vehicle.crew[i] == tankman.inventoryId:
-					if tankman.role == "Commander":
+					if tankman.descriptor.role == "commander":
 						# Recon Skill
 						recon_skill = 0
 						if len(tankman.descriptor.skills) > 0:
@@ -337,7 +337,7 @@ class _CurrentVehicle(object):
 
 						if xvm_conf["tankrange"]["logging"]:
 							LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * recon_skill ))
-					if tankman.role == "Radio Operator":
+					if tankman.descriptor.role == "radioman":
 						# Situational Awareness Skill
 						situational_skill = 0
 						if len(tankman.descriptor.skills) > 0:
