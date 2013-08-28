@@ -263,12 +263,9 @@ class _CurrentVehicle(object):
 			return
 
 		# Get view distance
-		def GetViewDistance(vehicle, logging):
-			view_distance = vehicle.descriptor.turret["circularVisionRadius"]
-			if logging:
-				LOG_NOTE("Base View Range: ", view_distance)
-			return view_distance
-		view_distance = GetViewDistance(self.__vehicle, xvm_conf["tankrange"]["logging"])
+		view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
+		if xvm_conf["tankrange"]["logging"]:
+			LOG_NOTE("Base View Range: ", view_distance)
 
 		# Check for Ventilation
 		ventilation = self.__isOptionalEquipped("improvedVentilation")
@@ -280,29 +277,17 @@ class _CurrentVehicle(object):
 		if xvm_conf["tankrange"]["logging"] and consumable:
 			LOG_NOTE("Premium Consumable Found")
 
-		# Get crew
+		# Update crew
 		self.__updateCrew()
-		print self.__crew
 
 		# Check for Brothers In Arms
-		barracks_crew = yield Requester('tankman').getFromInventory()
+		brothers_in_arms = True
+		for name, data in self.__crew.iteritems():
+			if "brotherhood" not in data["skill"]:
+				brothers_in_arms = False
 
-		def doesCrewHaveBIA(vehicle, barracks, logging):
-			for tankman in barracks:
-				for i in range(len(vehicle.crew)):
-					if vehicle.crew[i] == tankman.inventoryId:
-						if not "brotherhood" in tankman.descriptor.skills:
-							return False
-						else:
-							training_skill = tankman.descriptor.skills.pop()
-							if training_skill == "brotherhood":
-								if tankman.descriptor.lastSkillLevel != 100:
-									return False
-			if logging:
-				LOG_NOTE("BIA Found")
-			return True
-
-		brothers_in_arms = doesCrewHaveBIA(self.__vehicle, barracks_crew, xvm_conf["tankrange"]["logging"])
+		if xvm_conf["tankrange"]["logging"] and brothers_in_arms:
+			LOG_NOTE("BIA Found")
 
 		# Calculate commander bonus
 		commander_skill = 0
@@ -319,43 +304,22 @@ class _CurrentVehicle(object):
 			if xvm_conf["tankrange"]["logging"]:
 				LOG_NOTE("Commander Skill: ", commander_skill)
 
-		# Calculate class skills
+		# Calculate other bonuses
 		other_bonus = 1.0
-		for tankman in barracks_crew:
-			for i in range(len(self.__vehicle.crew)):
-				if self.__vehicle.crew[i] == tankman.inventoryId:
-					if tankman.descriptor.role == "commander":
-						# Recon Skill
-						recon_skill = 0
-						if len(tankman.descriptor.skills) > 0:
-							training_skill = tankman.descriptor.skills.pop()
-							if training_skill == "commander_eagleEye":
-								recon_skill = tankman.descriptor.lastSkillLevel
-							else:
-								if "commander_eagleEye" in tankman.descriptor.skills:
-									recon_skill = 100
+		for name, data in self.__crew.iteritems():
+			# Calculate recon skills
+			if "commander_eagleEye" in data["skill"]:
+				other_bonus *= 1.0 + ( 0.0002 * data["skill"]["commander_eagleEye"] )
 
-						# Append skill
-						other_bonus *= 1.0 + ( 0.0002 * recon_skill )
+				if xvm_conf["tankrange"]["logging"]:
+					LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * data["skill"]["commander_eagleEye"] ))
 
-						if xvm_conf["tankrange"]["logging"]:
-							LOG_NOTE("Recon Bonus: ", 1.0 + ( 0.0002 * recon_skill ))
-					if tankman.descriptor.role == "radioman":
-						# Situational Awareness Skill
-						situational_skill = 0
-						if len(tankman.descriptor.skills) > 0:
-							training_skill = tankman.descriptor.skills.pop()
-							if training_skill == "radioman_finder":
-								situational_skill = tankman.descriptor.lastSkillLevel
-							else:
-								if "radioman_finder" in tankman.descriptor.skills:
-									situational_skill = 100
+			# Calculate Situational Awareness Skill
+			if "radioman_finder" in data["skill"]:
+				other_bonus *= 1.0 + ( 0.0002 * data["skill"]["radioman_finder"] )
 
-						# Append Skill
-						other_bonus *= 1.0 + ( 0.0003 * situational_skill )
-
-						if xvm_conf["tankrange"]["logging"]:
-							LOG_NOTE("Situational Awareness Bonus: ", 1.0 + ( 0.0003 * situational_skill ))
+				if xvm_conf["tankrange"]["logging"]:
+					LOG_NOTE("Situational Awareness Bonus: ", 1.0 + ( 0.0003 * data["skill"]["radioman_finder"] ))
 
 		# Check for Binoculars
 		binoculars = self.__isOptionalEquipped("stereoscope")
@@ -405,13 +369,17 @@ class _CurrentVehicle(object):
 		for tankman in barracks:
 			for crew_id in self.__vehicle.crew:
 				if crew_id == tankman.inventoryId:
-					crew_member = { "level": tankman.descriptor.roleLevel, "skill": [] }
+					crew_member = { "level": tankman.descriptor.roleLevel, "skill": {} }
 
+					skills = []
 					for skill_name in tankman.descriptor.skills:
-						crew_member["skill"].append({ "name": skill_name, "level": 100 })
+						skills.append({ "name": skill_name, "level": 100 })
 
-					if len(crew_member["skill"]) != 0:
-						crew_member["skill"][-1]["level"] = tankman.descriptor.lastSkillLevel
+					if len(skills) != 0:
+						skills[-1]["level"] = tankman.descriptor.lastSkillLevel
+
+					for skill in skills:
+						crew_member["skill"][skill["name"]] = skill["level"]
 
 					self.__crew[tankman.descriptor.role] = crew_member
 
