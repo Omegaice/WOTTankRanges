@@ -9,7 +9,7 @@ from Event import Event, EventManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.gui_items import FittingItem
 from debug_utils import *
-import io, os, json, codecs
+import io, os, json, codecs, math
 from items import tankmen
 import thread
 
@@ -149,8 +149,6 @@ class _CurrentVehicle(object):
 		xvm_conf = {
 			"tankrange": {
 				"logging": True,
-				"ignore_artillery": False,
-
 				"view_circle": {
 					"enabled": True,
 					"color": "0xFFFFFF",
@@ -162,6 +160,15 @@ class _CurrentVehicle(object):
 					"color": "0xFFFFFF",
 					"alpha": 25,
 					"thickness": 0.5
+				},
+				"artillery": {
+					"ignore": False,
+					"circle": {
+						"enabled": True,
+						"color": "0xFF0000",
+						"alpha": 50,
+						"thickness": 0.5
+					},
 				}
 			}
 		}
@@ -249,17 +256,13 @@ class _CurrentVehicle(object):
 		xvm_conf["circles"]["special"] = remaining
 
 		# Get type
-		def isVehicleType(vehicle, vehicle_type, logging):
-			if vehicle_type in vehicle.descriptor.type.tags:
-				if logging:
-					LOG_NOTE("Ignoring " + vehicle_type + " tank.")
-				return True
-			return False
-
-		if xvm_conf["tankrange"]["ignore_artillery"] and isVehicleType(self.__vehicle, "SPG", xvm_conf["tankrange"]["logging"]):
+		if xvm_conf["tankrange"]["artillery"]["ignore"] and "SPG" in self.__vehicle.descriptor.type.tags:
 			f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
 			f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
 			f.close()
+
+			if xvm_conf["tankrange"]["logging"]:
+				LOG_NOTE("Ignoring " + vehicle_type + " tank.")
 			return
 
 		# Get view distance
@@ -350,6 +353,19 @@ class _CurrentVehicle(object):
 
 		if xvm_conf["tankrange"]["view_circle"]["enabled"]:
 			tank_data = { "enabled": True, "distance": view_distance, "color": xvm_conf["tankrange"]["view_circle"]["color"], "alpha": xvm_conf["tankrange"]["view_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["view_circle"]["thickness"]}
+			tank = { tank_name: tank_data }
+			xvm_conf["circles"]["special"].append(tank)
+
+		# Add Artillery Range
+		if xvm_conf["tankrange"]["artillery"]["circle"]["enabled"] and "SPG" in self.__vehicle.descriptor.type.tags:
+			artillery_range = 0
+			for shell in self.__vehicle.descriptor.gun["shots"]:
+				artillery_range = max(artillery_range, round(math.pow(shell["speed"],2) / shell["gravity"]))
+
+			if xvm_conf["tankrange"]["logging"]:
+				LOG_NOTE("Calculated Firing Range:", artillery_range)
+
+			tank_data = { "enabled": True, "distance": artillery_range, "color": xvm_conf["tankrange"]["artillery"]["circle"]["color"], "alpha": xvm_conf["tankrange"]["artillery"]["circle"]["alpha"], "thickness": xvm_conf["tankrange"]["artillery"]["circle"]["thickness"]}
 			tank = { tank_name: tank_data }
 			xvm_conf["circles"]["special"].append(tank)
 
