@@ -146,38 +146,12 @@ class _CurrentVehicle(object):
 			self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
 		# Set Defaults
-		xvm_conf = {
-			"tankrange": {
-				"logging": True,
-				"view_circle": {
-					"enabled": True,
-					"color": "0xFFFFFF",
-					"alpha": 50,
-					"thickness": 0.5
-				},
-				"binocular_circle": {
-					"enabled": True,
-					"color": "0xFFFFFF",
-					"alpha": 25,
-					"thickness": 0.5
-				},
-				"artillery": {
-					"ignore": False,
-					"circle": {
-						"enabled": True,
-						"color": "0xFF0000",
-						"alpha": 50,
-						"thickness": 0.5
-					},
-				}
-			}
-		}
+		xvm_conf = []
 
 		# Load configuration
 		xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
 		if not os.path.exists(xvm_configuration_file):
-			if xvm_conf["tankrange"]["logging"]:
-				LOG_NOTE("Configuration file missing (" + xvm_configuration_file + "). Creating.")
+			LOG_NOTE("Configuration file missing (" + xvm_configuration_file + "). Creating.")
 		else:
 			data = ""
 			blockComment = False
@@ -230,7 +204,42 @@ class _CurrentVehicle(object):
 
 			xvm_conf = json.loads(data)
 
-		# Make sure we have the correct minimap entries
+		# Make sure we have the correct defaults
+		if not "tankrange" in xvm_conf:
+			xvm_conf["tankrange"] = {}
+
+		if not "logging" in xvm_conf["tankrange"]:
+			xvm_conf["tankrange"]["logging"] = True
+
+		if not "view_circle" in xvm_conf["tankrange"]:
+			xvm_conf["tankrange"]["view_circle"] =  {
+				"enabled": True,
+				"color": "0xFFFFFF",
+				"alpha": 50,
+				"thickness": 0.5
+			}
+
+		if not "binocular_circle" in xvm_conf["tankrange"]:
+			xvm_conf["tankrange"]["binocular_circle"] =  {
+				"enabled": True,
+				"color": "0xFFFFFF",
+				"alpha": 50,
+				"thickness": 0.5
+			}
+
+		if not "artillery" in xvm_conf["tankrange"]:
+			xvm_conf["tankrange"]["artillery"] =  {
+				"ignore": False,
+				"circle": {
+					"enabled": True,
+					"color": "0xFF0000",
+					"alpha": 50,
+					"thickness": 0.5
+				}
+			}
+
+
+		# Setup Circles Dictionary
 		if not "circles" in xvm_conf:
 			xvm_conf["circles"] = { "enabled": True }
 
@@ -242,6 +251,11 @@ class _CurrentVehicle(object):
 
 		if not "special" in xvm_conf["circles"]:
 			xvm_conf["circles"]["special"] = {}
+
+		# Setup Circle's References
+		xvm_conf["circle_view"] = { "enabled": True, "color": xvm_conf["tankrange"]["view_circle"]["color"], "alpha": xvm_conf["tankrange"]["view_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["view_circle"]["thickness"]}
+		xvm_conf["circle_binocular"] = { "enabled": True, "color": xvm_conf["tankrange"]["binocular_circle"]["color"], "alpha": xvm_conf["tankrange"]["binocular_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["binocular_circle"]["thickness"]}
+		xvm_conf["circle_artillery"] = { "enabled": True, "color": xvm_conf["tankrange"]["artillery"]["circle"]["color"], "alpha": xvm_conf["tankrange"]["artillery"]["circle"]["alpha"], "thickness": xvm_conf["tankrange"]["artillery"]["circle"]["thickness"]}
 
 		# Get name
 		tank_name = self.__vehicle.descriptor.type.name.split(":")[1].lower().replace("-","_")
@@ -343,18 +357,14 @@ class _CurrentVehicle(object):
 
 		# Add binocular Circles
 		if xvm_conf["tankrange"]["binocular_circle"]["enabled"] and binoculars:
-			tank_data = { "enabled": True, "distance": min(view_distance * 1.25, 500), "color": xvm_conf["tankrange"]["binocular_circle"]["color"], "alpha": xvm_conf["tankrange"]["binocular_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["binocular_circle"]["thickness"]}
-			tank = { tank_name: tank_data }
-			xvm_conf["circles"]["special"].append(tank)
+			xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "circle_binocular" }, "distance": view_distance * 1.25 } })
 
 		# Add standard Circles
 		if coated_optics == True:
 			view_distance = min(view_distance * 1.1, 500)
 
 		if xvm_conf["tankrange"]["view_circle"]["enabled"]:
-			tank_data = { "enabled": True, "distance": view_distance, "color": xvm_conf["tankrange"]["view_circle"]["color"], "alpha": xvm_conf["tankrange"]["view_circle"]["alpha"], "thickness": xvm_conf["tankrange"]["view_circle"]["thickness"]}
-			tank = { tank_name: tank_data }
-			xvm_conf["circles"]["special"].append(tank)
+			xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "circle_view" }, "distance": view_distance } })
 
 		# Add Artillery Range
 		if xvm_conf["tankrange"]["artillery"]["circle"]["enabled"] and "SPG" in self.__vehicle.descriptor.type.tags:
@@ -365,13 +375,11 @@ class _CurrentVehicle(object):
 			if xvm_conf["tankrange"]["logging"]:
 				LOG_NOTE("Calculated Firing Range:", artillery_range)
 
-			tank_data = { "enabled": True, "distance": artillery_range, "color": xvm_conf["tankrange"]["artillery"]["circle"]["color"], "alpha": xvm_conf["tankrange"]["artillery"]["circle"]["alpha"], "thickness": xvm_conf["tankrange"]["artillery"]["circle"]["thickness"]}
-			tank = { tank_name: tank_data }
-			xvm_conf["circles"]["special"].append(tank)
+			xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "circle_binocular" }, "distance": artillery_range } })
 
 		# Write result
 		f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
-		f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
+		f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2, sort_keys=True)))
 		f.close()
 
 		return
