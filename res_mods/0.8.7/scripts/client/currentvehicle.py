@@ -21,7 +21,7 @@ class _CurrentVehicle(object):
 		self.onChanged = Event(self.__eventManager)
 		self.onChanging = Event(self.__eventManager)
 		self.__vehicle = None
-		self.__crew = []
+		self.__crew = {}
 		self.__changeCallbackID = None
 		self.__clanLock = None
 		return
@@ -282,6 +282,7 @@ class _CurrentVehicle(object):
 
 		# Get crew
 		self.__updateCrew()
+		print self.__crew
 
 		# Check for Brothers In Arms
 		barracks_crew = yield Requester('tankman').getFromInventory()
@@ -401,21 +402,21 @@ class _CurrentVehicle(object):
 	@process
 	def __updateCrew(self):
 		from gui.Scaleform.utils.requesters import Requester
-		self.__crew = []
+		self.__crew.clear()
 
 		barracks = yield Requester('tankman').getFromInventory()
 		for tankman in barracks:
 			for crew_id in self.__vehicle.crew:
 				if crew_id == tankman.inventoryId:
-					crew_member = { "role": tankman.descriptor.role, "level": tankman.descriptor.roleLevel, "skills": [] }
+					crew_member = { "level": tankman.descriptor.roleLevel, "skill": [] }
 
 					for skill_name in tankman.descriptor.skills:
-						crew_member["skills"].append({ "name": skill_name, "level": 100 })
+						crew_member["skill"].append({ "name": skill_name, "level": 100 })
 
-					if len(crew_member["skills"]) != 0:
-						crew_member["skills"][-1]["level"] = tankman.descriptor.lastSkillLevel
+					if len(crew_member["skill"]) != 0:
+						crew_member["skill"][-1]["level"] = tankman.descriptor.lastSkillLevel
 
-					self.__crew.append(crew_member)
+					self.__crew[tankman.descriptor.role] = crew_member
 
 	def __isOptionalEquipped(self, optional_name):
 		for item in self.__vehicle.descriptor.optionalDevices:
