@@ -11,6 +11,7 @@ from gui.Scaleform.gui_items import FittingItem
 from debug_utils import *
 import io, os, json, codecs
 from items import tankmen
+import thread
 
 class _CurrentVehicle(object):
 
@@ -20,6 +21,7 @@ class _CurrentVehicle(object):
 		self.onChanged = Event(self.__eventManager)
 		self.onChanging = Event(self.__eventManager)
 		self.__vehicle = None
+		self.__crew = []
 		self.__changeCallbackID = None
 		self.__clanLock = None
 		return
@@ -126,7 +128,7 @@ class _CurrentVehicle(object):
 	@process
 	def __request(self, inventoryId):
 		Waiting.show('updateCurrentVehicle', True)
-		from gui.Scaleform.utils.requesters import Requester, StatsRequester, VehicleItemsRequester
+		from gui.Scaleform.utils.requesters import Requester, StatsRequester, VehicleItemsRequester, InventoryRequester
 		vehicles = yield Requester('vehicle').getFromInventory()
 		vehicleTypeLocks = yield StatsRequester().getVehicleTypeLocks()
 		globalVehicleLocks = yield StatsRequester().getGlobalVehicleLocks()
@@ -247,56 +249,59 @@ class _CurrentVehicle(object):
 		xvm_conf["circles"]["special"] = remaining
 
 		# Get type
-		if xvm_conf["tankrange"]["ignore_artillery"] and 'SPG' in self.__vehicle.descriptor.type.tags:
-			if xvm_conf["tankrange"]["logging"]:
-				LOG_NOTE("Ignoring SPG Tank")
+		def isVehicleType(vehicle, vehicle_type, logging):
+			if vehicle_type in vehicle.descriptor.type.tags:
+				if logging:
+					LOG_NOTE("Ignoring " + vehicle_type + " tank.")
+				return True
+			return False
 
-			# Write result
+		if xvm_conf["tankrange"]["ignore_artillery"] and isVehicleType(self.__vehicle, "SPG", xvm_conf["tankrange"]["logging"]):
 			f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
 			f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2)))
 			f.close()
 			return
 
 		# Get view distance
-		view_distance = self.__vehicle.descriptor.turret["circularVisionRadius"]
-		if xvm_conf["tankrange"]["logging"]:
-			LOG_NOTE("Base View Range: ", view_distance)
+		def GetViewDistance(vehicle, logging):
+			view_distance = vehicle.descriptor.turret["circularVisionRadius"]
+			if logging:
+				LOG_NOTE("Base View Range: ", view_distance)
+			return view_distance
+		view_distance = GetViewDistance(self.__vehicle, xvm_conf["tankrange"]["logging"])
 
 		# Check for Ventilation
-		ventilation = False
-		for item in self.__vehicle.descriptor.optionalDevices:
-			if item is not None and "improvedVentilation" in item.name:
-				ventilation = True
+		ventilation = self.__isOptionalEquipped("improvedVentilation")
+		if xvm_conf["tankrange"]["logging"] and ventilation:
+			LOG_NOTE("Ventilation Found")
 
 		# Check for Consumable
-		vehicles = yield Requester('vehicle').getFromInventory()
-
-		consumable = False
-		for mounted in self.__vehicle.equipments:
-			for item in VehicleItemsRequester(vehicles).getItems(['equipment']):
-				if item.compactDescr == mounted and item.descriptor is not None:
-					if "ration" in item.descriptor.name:
-						consumable = True
+		consumable = self.__isConsumableEquipped("ration")
+		if xvm_conf["tankrange"]["logging"] and consumable:
+			LOG_NOTE("Premium Consumable Found")
 
 		# Get crew
-		barracks_crew = yield Requester('tankman').getFromInventory()
+		self.__updateCrew()
 
 		# Check for Brothers In Arms
-		brothers_in_arms = True
-		for tankman in barracks_crew:
-			for i in range(len(self.__vehicle.crew)):
-				if self.__vehicle.crew[i] == tankman.inventoryId:
-					if not "brotherhood" in tankman.descriptor.skills:
-						brothers_in_arms = False
-						break
-					else:
-						bia_skill = 0
+		barracks_crew = yield Requester('tankman').getFromInventory()
 
-						training_skill = tankman.descriptor.skills.pop()
-						if training_skill == "brotherhood":
-							if tankman.descriptor.lastSkillLevel != 100:
-								brothers_in_arms = False
-								break
+		def doesCrewHaveBIA(vehicle, barracks, logging):
+			for tankman in barracks:
+				for i in range(len(vehicle.crew)):
+					if vehicle.crew[i] == tankman.inventoryId:
+						if not "brotherhood" in tankman.descriptor.skills:
+							return False
+						else:
+							training_skill = tankman.descriptor.skills.pop()
+							if training_skill == "brotherhood":
+								if tankman.descriptor.lastSkillLevel != 100:
+									return False
+			if logging:
+				LOG_NOTE("BIA Found")
+			return True
+
+		brothers_in_arms = doesCrewHaveBIA(self.__vehicle, barracks_crew, xvm_conf["tankrange"]["logging"])
 
 		# Calculate commander bonus
 		commander_skill = 0
@@ -316,7 +321,7 @@ class _CurrentVehicle(object):
 						if xvm_conf["tankrange"]["logging"]:
 							LOG_NOTE("Commander Skill: ", commander_skill)
 
-		# Calculate role and class skills
+		# Calculate class skills
 		other_bonus = 1.0
 		for tankman in barracks_crew:
 			for i in range(len(self.__vehicle.crew)):
@@ -355,16 +360,14 @@ class _CurrentVehicle(object):
 							LOG_NOTE("Situational Awareness Bonus: ", 1.0 + ( 0.0003 * situational_skill ))
 
 		# Check for Binoculars
-		binoculars = False
-		for item in self.__vehicle.descriptor.optionalDevices:
-			if item is not None and item.name == "stereoscope":
-				binoculars = True
+		binoculars = self.__isOptionalEquipped("stereoscope")
+		if xvm_conf["tankrange"]["logging"] and binoculars:
+			LOG_NOTE("Binoculars Found")
 
 		# Check for Coated Optics
-		coated_optics = False
-		for item in self.__vehicle.descriptor.optionalDevices:
-			if item is not None and item.name == "coatedOptics":
-				coated_optics = True
+		coated_optics = self.__isOptionalEquipped("coatedOptics")
+		if xvm_conf["tankrange"]["logging"] and coated_optics:
+			LOG_NOTE("Coated Optics Found")
 
 		# Calculate final value
 		view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
@@ -394,6 +397,42 @@ class _CurrentVehicle(object):
 		f.close()
 
 		return
+
+	@process
+	def __updateCrew(self):
+		from gui.Scaleform.utils.requesters import Requester
+		self.__crew = []
+
+		barracks = yield Requester('tankman').getFromInventory()
+		for tankman in barracks:
+			for crew_id in self.__vehicle.crew:
+				if crew_id == tankman.inventoryId:
+					crew_member = { "role": tankman.descriptor.role, "level": tankman.descriptor.roleLevel, "skills": [] }
+
+					for skill_name in tankman.descriptor.skills:
+						crew_member["skills"].append({ "name": skill_name, "level": 100 })
+
+					if len(crew_member["skills"]) != 0:
+						crew_member["skills"][-1]["level"] = tankman.descriptor.lastSkillLevel
+
+					self.__crew.append(crew_member)
+
+	def __isOptionalEquipped(self, optional_name):
+		for item in self.__vehicle.descriptor.optionalDevices:
+			if item is not None and optional_name in item.name:
+				return True
+		return False
+
+	def __isConsumableEquipped(self, consumable_name):
+		from gui.Scaleform.utils.requesters import VehicleItemsRequester
+
+		for item in VehicleItemsRequester([self.__vehicle]).getItems(['equipment']):
+			if item.descriptor is not None:
+				for mounted in self.__vehicle.equipments:
+					if item.compactDescr == mounted:
+						if consumable_name in item.descriptor.name:
+							return True
+		return False
 
 	def __changeDone(self):
 		self.__changeCallbackID = None
