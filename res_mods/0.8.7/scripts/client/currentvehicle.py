@@ -306,21 +306,18 @@ class _CurrentVehicle(object):
 
 		# Calculate commander bonus
 		commander_skill = 0
-		for tankman in barracks_crew:
-			for i in range(len(self.__vehicle.crew)):
-				if self.__vehicle.crew[i] == tankman.inventoryId:
-					if tankman.descriptor.role == "commander":
-						# Major Role Skill
-						commander_skill = tankman.descriptor.roleLevel
-						if brothers_in_arms == True:
-							commander_skill += 5
-						if ventilation == True:
-							commander_skill += 5
-						if consumable == True:
-							commander_skill += 10
+		if "commander" in self.__crew:
+			commander_skill = self.__crew["commander"]["level"]
 
-						if xvm_conf["tankrange"]["logging"]:
-							LOG_NOTE("Commander Skill: ", commander_skill)
+			if brothers_in_arms == True:
+				commander_skill += 5
+			if ventilation == True:
+				commander_skill += 5
+			if consumable == True:
+				commander_skill += 10
+
+			if xvm_conf["tankrange"]["logging"]:
+				LOG_NOTE("Commander Skill: ", commander_skill)
 
 		# Calculate class skills
 		other_bonus = 1.0
