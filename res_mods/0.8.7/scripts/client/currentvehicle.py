@@ -146,7 +146,7 @@ class _CurrentVehicle(object):
 			self.__changeCallbackID = self.__changeCallbackID or BigWorld.callback(0.1, self.__changeDone)
 
 		# Set Defaults
-		xvm_conf = []
+		xvm_conf = {}
 
 		# Load configuration
 		xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
