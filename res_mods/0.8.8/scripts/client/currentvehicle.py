@@ -294,9 +294,12 @@ class _CurrentVehicle():
 
             # Check for Brothers In Arms
             brothers_in_arms = True
-            for name, data in self.__crew.iteritems():
-                if "brotherhood" not in data["skill"]:
-                    brothers_in_arms = False
+            if len(self.__crew) == 0:
+                brothers_in_arms = False
+            else:
+                for name, data in self.__crew.iteritems():
+                    if "brotherhood" not in data["skill"]:
+                        brothers_in_arms = False
 
             if xvm_conf["tankrange"]["logging"] and brothers_in_arms:
                 LOG_NOTE("BIA Found")
@@ -387,7 +390,7 @@ class _CurrentVehicle():
         barracks = yield Requester('tankman').getFromInventory()
         for tankman in barracks:
             for crewman in self.item.crew:
-                if crewman[1].invID == tankman.inventoryId:
+                if crewman is not None and crewman[1].invID == tankman.inventoryId:
                     crew_member = { "level": tankman.descriptor.roleLevel, "skill": {} }
 
                     skills = []
