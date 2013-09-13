@@ -412,7 +412,7 @@ class _CurrentVehicle():
         from gui.shared.utils.requesters import VehicleItemsRequester
 
         for item in self.item.eqsLayout:
-            if consumable_name in item.descriptor.name:
+            if item is not None and consumable_name in item.descriptor.name:
                 return True
         return False
 
