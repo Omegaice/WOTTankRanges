@@ -390,7 +390,7 @@ class _CurrentVehicle():
         barracks = yield Requester('tankman').getFromInventory()
         for tankman in barracks:
             for crewman in self.item.crew:
-                if crewman is not None and crewman[1].invID == tankman.inventoryId:
+                if crewman[1] is not None and crewman[1].invID == tankman.inventoryId:
                     crew_member = { "level": tankman.descriptor.roleLevel, "skill": {} }
 
                     skills = []
