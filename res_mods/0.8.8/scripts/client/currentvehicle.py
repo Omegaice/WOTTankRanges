@@ -58,6 +58,9 @@ class _CurrentVehicle():
                 isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive, vehsDiff.itervalues())) > 0
                 (isComponentsChanged or isRepaired or isVehicleDescrChanged) and self.refreshModel()
             (isVehicleChanged or isRepaired) and self.onChanged()
+
+        if self.isPresent():
+            self.__updateViewRange()
         return
 
     def onLocksUpdate(self, locksDiff):
