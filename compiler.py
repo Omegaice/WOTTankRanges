@@ -1,17 +1,27 @@
-import py_compile, zipfile
+import py_compile, zipfile, os, glob
 
-py_compile.compile("res_mods/0.8.8/scripts/client/currentvehicle.py")
+WOTVersion = "0.8.9"
+
+# Compile Source
+py_compile.compile("src/currentvehicle.py")
+
+# Build Standalone Zip
+if os.path.exists("XVMTankRange.zip"):
+	os.remove("XVMTankRange.zip")
 
 fZip = zipfile.ZipFile( "XVMTankRange.zip", "w" )
-fZip.write("res_mods/0.8.8/scripts/client/currentvehicle.pyc")
+fZip.write("src/currentvehicle.pyc", "res_mods/"+WOTVersion+"/scripts/client/currentvehicle.pyc")
 fZip.close()
 
+# Build XVM Zip
+if os.path.exists("XVMTankRange-WithXVM.zip"):
+	os.remove("XVMTankRange-WithXVM.zip")
+
 fZip = zipfile.ZipFile( "XVMTankRange-WithXVM.zip", "w" )
-fZip.write("res_mods/0.8.8/gui/scaleform/battle.swf")
-fZip.write("res_mods/0.8.8/gui/scaleform/Minimap.swf")
-fZip.write("res_mods/0.8.8/gui/scaleform/PlayersPanel.swf")
-fZip.write("res_mods/0.8.8/gui/scaleform/xvm.swf")
-fZip.write("res_mods/0.8.8/scripts/client/currentvehicle.pyc")
-fZip.write("res_mods/xvm/xvm.swf")
-fZip.write("res_mods/xvm/xvm.xc")
+fZip.write("src/currentvehicle.pyc", "res_mods/"+WOTVersion+"/scripts/client/currentvehicle.pyc")
+
+for root, dirnames, filenames in os.walk('xvm'):
+	for filename in filenames:
+		fZip.write(os.path.join(root, filename), "res_mods/"+os.path.join(root, filename)[4:])
+
 fZip.close()

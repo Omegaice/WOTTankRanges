@@ -1,0 +1,628 @@
+﻿XVM-5.0.1-test1:
+  * adaptation to WoT 0.8.9
+
+  [NEW FUNCTIONS]
+  * localization: added Brazilian Portuguese language
+  [MACROS]
+  * squad: added macros {{vtype-l}}
+
+XVM-5.0.0-test5:
+  * adaptation to WoT 0.8.8
+
+  [NEW FUNCTIONS]
+  * possibility of editing nickname field in battleloading, Tab:
+    formatLeftNick, formatRightNick
+  * new options:
+    login/skipIntro - Skip intro movie
+    login/autologin - Auto enter to the game
+    userInfo/startPage - Initial page userinfo window (default: 4)
+    battleResults/showNetIncome - Display net income of credits in After Battle Screen
+    battleResults/showExtendedInfo - Display shots precision and damage in After Battle Screen
+    userInfo/defaultFilterValue - default value for the filter text input
+  * possibility of editing format of vehicle info field in squad window:
+      squad/formatInfoField
+  * ability to configure different sets of icons to the left and right panels, markers of allies and enemies:
+      iconset/battleLoadingAlly, iconset/battleLoadingEnemy - for battle loading
+      iconset/playersPanelAlly, iconset/playersPanelEnemy   - for players panel
+      iconset/statisticFormAlly, iconset/statisticFormEnemy - for Tab window
+      iconset/vehicleMarkerAlly, iconset/vehicleMarkerEnemy - for vehicle markers
+  * pinger: add wine support. For activation execute
+    ln -s `which ping` ~/.wine/drive_c/ping.exe
+  * localization: added Romanian, Bulgarian, Danish, Italian, Norwegian, Serbian, Slovak and Turkish languages
+  * localization: added Polish, French readme
+
+  [MACROS]
+  * added macros {{c:avglvl}}, {{a:avglvl}}
+  * squad: added macros {{level}}, {{rlevel}}, {{vtype}}, {{battletier-min}}, {{battletier-max}}
+
+  [FIXES]
+  * fixed "sixth sense" icon wrong positioning
+  * minimap: fixed enemy teamkiller color
+  * markers: fixed drowned vehicle type icon color
+
+  [OTHER]
+  * new platform - AS3+Python
+  * xvm-stat, Dokan and .NET Framework is not required now. Please, delete xvm-stat.exe.
+  * removed TWR rating
+  * config version increased to 5.0.0
+  * statistic is disabled in the config by default
+  * changed clock format in battleloading (http://php.net/date)
+  * config: "finalStatistic" section renamed to "battleResults"
+  * removed battleResults/sortColumn option, build in since 0.8.8
+  * removed option login/showPingOnGameLoading, userInfo/showEColumn, squad/romanNumbers,
+    squad/leftLvlBorder, squad/rightLvlBorder
+  * renamed fields in iconset: iconset/battleLoading, iconset/playersPanel, iconset/statisticForm, iconset/vehicleMarker
+  * renamed fields "formatLeft", "formatRight" in battleloading, Tab
+
+XVM-4.1.1:
+  [NEW FUNCTIONS]
+  * localization: added Finnish, French, German, Hungarian, Korean, Polish, Spanish and Vietnamese translations
+  * localization: macros for translating text in config, removed language dependency from config
+  * hitlog: rows in HP Left panel can be formatted
+  * xvm-stat: /priority parameter
+  * minimap: support vehicle names from vehicleNames.xc
+  * minimap: short vehicle names from vehicleNames.xc
+
+  [FIXES]
+  * minimap: fixed labels for asian region
+  * stock\top turret marker: removed incorrect markers at some SPGs
+  * squad window: fixed missing info for some vehicles
+  * squad window: text field with vehicle tier no longer creates artefacts
+
+  [OTHER]
+  * automation: XVM nightly builds http://wargaming.by-reservation.com/xvm/
+
+XVM-4.1.0:
+  [NEW FUNCTIONS]
+  * new options:
+    login/pingServers/showPingOnGameLoading - show ping during game loading, before login screen
+    userInfo/showFilters - show tank filters
+    userInfo/filterFocused - set the default focus to the filter text input
+    userInfo/sortColumn - number of column for sorting
+      1 - Level, 2 - Type, 3 - Nation, 4 - Name, 5 - E, 6 - Fights, 7 - Wins, 8 - Class mark
+      Sort order: >0 - default, <0 - inverse
+    hangar/xwnInCompany - show XWN instead of XEFF in company windows
+    language - language used in mod (support translation files in xvm/l10n/)
+    hangar/widgetsEnabled - enable hangar widgets. Currently, only clock is available.
+  * minimap: new label types - wrecks, teamkillers, lost allies
+  * localization: XVM now using external files for translation
+  * localization: added Belarusian, Ukranian and Czech translations
+  * snippets - extended battle elements settings. battle/elements section was changed.
+    details is here: http://www.koreanrandom.com/forum/topic/1761-snippets/ (Russian)
+    xvm-stat 1.6.1 or higher required
+
+  [FIXES]
+  * minimap: label of observer vehicle is no longer rotating with icon
+  * minimap: some interface object are no longer overlapping zoomed minimap
+  * minimap: fixed players death log list positioning while minimap is zoomed
+  * minimap: fixed work when there is only one player in enemy team
+  * hitlog: damage to drowned units is not taken into account anymore
+
+  [OTHER]
+  * minimap: shapes attached to vehicles are removed on player death
+  * minimap: code refactoring
+  * minimap: labels are detached from icons to lower layer
+  * minimap: shapes work in all locales without xvm-stat.exe
+  * squad window: work in all locales
+
+XVM-4.0.0:
+  * adaptation to WoT 0.8.6
+
+  [NEW FUNCTIONS]
+  * transparency statistics macros ({{a:xwn}},...)
+  * ability to set colors for vehicle type markers (macros for dynamic colors can be used)
+  * new option: hangar/hideTutorial
+  * filter by tanks in the own hangar in the Achievements window
+  * separate settings for self and squadman damage text
+  * filter by tank name in the Achievements window
+  * new option: userInfo/inHangarFilterEnabled - enable "In hangar" check box by default
+  * switch in user info window: [show] in hangar, player tanks, all tanks
+  * expertPanel mod; see battle.xc
+  * cluster responce time table at login and hangar (ping);
+    "pingServers" section at login.xc and  hangar.xc config files
+  * hitlog: shows enemy HP left (markers which were visible) on Alt press;
+    hitlog.xc: "hpLeft": "true"
+  * show ping at the game loading screen; login.xc/pingServers
+
+  [FIXES]
+  * fixed rare condition when wrong minimap lost marker was deleted
+  * minimap zoom: disabled while chatting; hotkeys.xc config comment about supported keys is updated
+  * minimap: fix issues at Fisherman's bay map for EN\US locale users without xvm-stat.exe
+  * some other fixes
+
+  [OTHER]
+  * new config format (now config is loading from res_mods/xvm/xvm.xc)
+  * removed legacy support for OTMData.xml config
+  * config version changed to 4.0.0
+  * special scheme name for <img> tag: xvmres:// - path relative to res_mods/xvm/res folder
+      for example: <img src='xvmres://icons/foo.png'>
+  * minimap: deustch locale support without xvm-stat.exe
+
+XVM-3.5.0
+  * adaptation to WoT 0.8.5
+
+  [NEW FUNCTIONS]
+  * squad window: show info about tank
+  * enemy spotted status at right side panel
+  * crew: crew loading mod (author: Lemaxho)
+  * added button in company window for enabling automatic loading data
+  * implemented ability to disable "Allies | Enemies" text fields under score panel
+    - upper level section "fragCorrelation" at xvm config file
+
+  [FIXES]
+  * fixed mouse cursor with minimap zoom by Ctrl press
+  * fixed endless loop when stat is not available
+  * capture bar: tweak
+  * minimap: added new map Pearl River to map recognition system
+  * score panel updated
+  * fixed sorting in After Battle stats
+  * fixed win chances with test tanks
+  * other fixes
+
+  [MINIMAP]
+  * minimap enabled by default
+  * zoom minimap by key pressing;
+    see sections "minimap":{"zoom" and "hotkeys":{ at XVM.xvmconf
+  * 1000m square implemented
+  * 1km square switch for artillery
+  * xvm-stat.exe is not necessary for map recongnition for RU, NA/EN, CH locales
+  * {{vehicle-name}} macro returns vehicle system name - usa-M24_Chaffee
+  * smoothed superHeavyTank and all tank wrecks icons
+  * zoom size memory fixed
+  * world map battle fix
+  * iconScale now does not affect capture bases
+
+  [OTHER]
+  * xvm-stat protocol reworked
+    ATTENTION: XVM Stat 1.4.0 ot higher required
+  * user statistics in hangar enabled by default
+  * markers: auto size text fields
+  * updated per-vehicle statistics data (added new tanks)
+  * minimap: zoom minimap on Ctrl press disabled by default
+  * updated clan icons
+
+XVM-3.4.2:
+  * minimap fix: minimal map size
+  * minimap fix: map size glitched when WoT window was resized or Alt+Tab-ed
+
+XVM-3.4.1:
+  * bugfix
+
+XVM-3.4.0:
+  * adaptation to WoT 0.8.4
+
+  [MACROS]
+  * new macros:
+      {{avglvl}} - average level of tanks
+      {{wn}}, {{c:wn}} - WN6 rating: http://www.koreanrandom.com/forum/topic/2575-/
+      {{xeff}}, {{xwn}}, {{c:xeff}}, {{c:xwn}} - two-digits rating value
+        using "XVM Scale"
+        explanation: http://www.koreanrandom.com/forum/topic/2625-/page-15#entry35340 (in Russian)
+      {{twr}}, {{c:twr}} - tourist1984 win rate:
+        http://www.koreanrandom.com/forum/topic/2389-/
+      {{vehiclename}} for internal vehicle name like "usa-M24_Chaffee"
+        can be used in the text fields:
+        "<img src='img://gui/maps/icons/vehicle/contour/{{vehiclename}}.png'>"
+      {{clannb}} - clan name without brackets
+
+  [NEW FUNCTIONS]
+  * minimap mod
+  * UserInfo mod (with functions from morotopitek's mod)
+  * TeamMemberRenderer mod
+  * FinalStatistic mod (with functions from morotopitek's mod).
+  * new win chance formula by TurinDeNar:
+      http://www.koreanrandom.com/forum/topic/2598-/
+
+  [CONFIG]
+  * added colors setup sections: colors/wn, colors/twr
+  * added colors setup section: colors/x for XVM Scale colors
+  * added section finalStatistic for final statistic window settings
+  * added parameter: hitLog/defaultHeader - default header format (before first hit)
+  * cnanged efficiency in the default config:
+      was: {{eff:4}}, now: {{xwn}}
+
+  [FIXES]
+  * fixed {{c:system}} macro
+  * fixed {{nick}} macro in the medium2 players panel mode
+  * fixed statistics loading in the Fog Of War mode
+
+  [CAPTURE BAR]
+  * capture bar: fixed "enabled":false
+  * capture bar: fixed number of tanks capturing for Tank Company encounter battles
+  * capture bar: capturers number fix
+
+  [OTHER]
+  * updated statistic data for new vehicles
+
+XVM-3.3.1:
+  * hitlog extremely oversized symbols fix
+
+XVM-3.3.0:
+  * release for WoT 0.8.3
+
+XVM-3.3.0-test1:
+  * capture bar: fixed wrong capturers number calculation for encounter
+  * macro {{c:dmg}} can be used in health bar
+  * default sorting by exp in Final Statistics
+  * adaptation to WoT 0.8.3.CT2
+
+XVM-3.2.1-test1:
+  * capmod: fixed capture bar fill at 100%
+  * code optimization
+  * updating per-vehicle efficiency formula:
+      TEFF: E
+      0..299: 1 - very bad player
+      300..499: 2 - bad player
+      500..699: 3 - poor
+      700..899: 4 - below average
+      900..1099: 5 - average
+      1100..1299: 6 - above average
+      1300..1549: 7 - good
+      1550..1799: 8 - great
+      1800..1999: 9 - master
+      2000+: E - Expert (top-100 players on this vehicle)
+
+XVM-3.2.0:
+  * adaptation to WoT 0.8.2
+  * new vehicles added
+  * color palette revised
+  * new macros:
+      {{tdb}}, {{tdb:4}} - average damage for current tank - damage/battles
+      {{tdv}} - average damage efficiency for tank - damage/(battles*maxHP)
+      {{tfb}} - average frags per battle for current tank
+      {{tsb}} - average number of spotted enemies per battle for current tank
+      {{c:tdb}}, {{c:tdv}}, {{c:tfb}}, {{c:tsb}} - dynamic colors for this macros
+      {{teff}} - new per-vehicle efficiency
+        Discussion: http://www.koreanrandom.com/forum/topic/1643-
+      {{c:system}} - use system color instead of override
+      {{c:dmg}} - color depended from damage source
+  * new value of macro {{e}} (new per-vehicle efficiency in range 0..9)
+  * removed macro {{e:3}} (not required)
+  * HTML in clock in battle
+  * dynamic color and transparency for shadow
+  * shadow settings in hitlog
+
+XVM-3.1.2:
+  * added capture bar mod
+  * fixed standard markers mode
+  * do not calculate friendly fire in hitlog
+  * improved default major color palette
+  * new macros:
+      {{name}} - player nickname without clan name
+      {{clan}} - clan name with brackets (empty if no clan)
+      {{vtype}} - vehicle type
+      {{squad}} - value '1' for squadmates, empty for others (in markers)
+      {{e}}, {{e:3}} - efficiency / 10 (save 1 char)
+  * new config section texts/vtype for changing vehicle types text
+  * fixed display a marker for the tank with the dead crew
+  * new option: "rating"/"enableStatisticsLog" allow to enable saving statistics
+    to "xvm-stat.log" file
+  * show chance to win on final statistic form
+
+XVM-3.1.1:
+  * bugfix
+
+XVM-3.1.0:
+  * XVM is distributed only in Lite version, without statistics module
+  * statistics module was renamed to xvm-stat and distributed in separate package
+  * support of HTML in any text field, including vehicle markers
+  * win chahce is disabled by default
+  * SixthSense.png added to samples
+  * updated {{turret}} marker for new and old vehicles
+  * stock turret marker added to the default config (after vehicle name)
+  * damage animation was improved
+  * the default font of floating damage is the same as in the client
+  * added new section to config "colors"/"damage", which allows to adjust the color of
+    floating damage depending on the source of damage
+  * added config section "colors"/"dmg_kind"
+  * added macro {{c:dmg_kind}} for dynamic color in depend of damage kind
+  * added new section to config "hitLog", which allows to display the log of own hits
+  * negative x, y values in hit log settings allow to bind the text to the right
+    and bottom edges for the same behavior with different screen resolutions.
+    Will work only with running xvm-stat!!!
+
+XVM-3.0.3:
+  * added possibility to change {{turret}} marker display string
+  * fixed {{turret}} marker calculations for a-20, bt-7, d2, m7_med, pziv, t2_med
+  * fixed {{turret}} marker significance for Patton and Pershing
+  * added possibility to change sixth sense indicator.
+    Alternative PNG image should be placed at res_mods/icons/SixthSense.png
+
+XVM-3.0.2:
+  * fixed color blind mode
+  * wot-xvm-proxy: added /maximized option (run client in maximized window)
+
+XVM-3.0.1:
+  * added information for tanks PzKpfwIV Schmalturm, Panther-M10 and СУ-122-44
+
+XVM-3.0.0:
+  * xvm was refactored
+  * new tank marker {{turret}}:
+    Displays symbol is tank has stock turret.
+	"*" symbol - stock turret. Cant mount top gun. Subject is highly vulnerable.
+	"-" symbol - stock turret. Top gun is possible. Subject is somewhat vulnerable.
+	Stock turret can have weaker armor, lower sight distance or slower rotation speed.
+	Besides that, tank with stock turret can have weaker crew experience.
+  * separate settings for all elements in all states
+  * adaptation to WoT 0.8.0
+
+XVM-2.5.2:
+  * clan icons was reworked. Now config have only one parameter:
+    battle/clanIconsFolder with path to clan icons root folder. All icons
+    are loading automatically from game region subfolder (RU/EU/US/...).
+    To add your clan or player icon, just copy icon file to:
+      clanicons/[REGION]/clan/ (for clan)
+      clanicons/[REGION]/nick/ (for single player)
+    Also you can create default clan and player icons:
+      clanicons/[REGION]/clan/default.png (for default clan)
+      clanicons/[REGION]/nick/default.png (for default player)
+    Search order is:
+      nick/<player>.png -> clan/<clan>.png -> clan/default.png -> nick/default.png
+  * added config option:
+      battle/clanIconsFolder - root of clan icons folder
+  * removed config section:
+      players
+  * config version increased: 1.4.0 => 1.5.0, because clan icons behavior
+    was changed
+  * Full archive with all clans can be downloaded separately:
+      http://code.google.com/p/wot-xvm/downloads/detail?name=clanicons-full-ru.zip (RU)
+      http://code.google.com/p/wot-xvm/downloads/detail?name=clanicons-full-eu.zip (EU)
+      http://code.google.com/p/wot-xvm/downloads/detail?name=clanicons-full-us.zip (US)
+  * removed coords grid (parameter battle.drawGrid)
+  * statistics enabled by default
+  * added {{rlevel}} macro for vehicle level in roman numerals
+  * dynamic color and transparency for shadow
+  * added font/italic parameter (values: true/false)
+  * added {{c:vtype}} macro and colors/vtype section for dynamic color by
+    vehicle type
+  * added color for premium tanks to {{c:vtype}} macro
+  * {{c:vtype}} macro can be used in BattleLoading, PlayersPanel and
+    StatisticForm
+  * added "vehicleNames" config section. Used for vehicle names mapping -
+    ability to replace any tank name with own value
+
+XVM-2.5.1:
+  * fixed vehicle names in battle loading screen and statistic form
+
+XVM-2.5.0:
+  * adaptation to WoT 0.7.5
+  * code refactoring
+  * fixed bugs in "Fog of War" mode (incomplete)
+  * file XVM.log in the game directory contains mod debugging information
+  * added options:
+      battle/clockFormat - show the clock on the Debug Panel (near FPS)
+      battleLoading/clockFormat - show the clock on the Battle Loading Screen
+      battle/highlightVehicleIcon - setup highlighting of selected vehicle icon and squad
+  * remove option:
+      battleLoading/showClock - superseded by battleLoading/clockFormat
+  * macros usage for vehicle text fields in Battle Loading and Statistic Form
+  * config version increased: 1.3.0 => 1.4.0, because battleLoading/showClock
+    was replaced with battleLoading/сlockFormat and formatLeft/formatRight
+    behavior was changed
+  * clock and mod info on battle loading screen moved to the bottom info panel
+  * wot-xvm-proxy: added new command line parameter "/noproxy" for disabling
+    using of system proxy settings
+  * fixed ally icon position using standard markers
+  * added experimental chance to win formula
+  * editor moved: http://www.koreanrandom.com/forum/topic/1422-/#entry11316
+  * BattleTimerBig.swf removed from mod archive
+  * changes in chance to win formulas
+  * show chance to win on final statistic form
+
+XVM-2.4.1:
+  * battle task animation removed
+  * added new macros:
+      {{t-kb-0}} - kilo-battles with leading zero
+      {{t-hb}} - hecto-battles - battles/100
+      {{t-hb:3}} - hecto-battles aligned to 3 chars
+  * added option:
+      markers/*/vehicleIcon/showSpeaker - show speaker even if vehicle type
+      icon is disabled
+  * removed macros {{c:t-kb}}, use {{c:t-battles}} instead.
+  * fixed icon appearing for a moment when vehicle is spotted
+
+XVM-2.4:
+  * adaptation to WoT 0.7.4
+  * new proxy server
+  * added per-vehicle statistics. New macros:
+      {{t-kb}}
+      {{t-battles}}
+      {{t-wins}}
+      {{t-rating}}
+      {{t-kb:4}}
+      {{t-rating:3}}
+      {{t-battles:4}}
+      {{c:t-rating}}
+      {{c:t-kb}}
+      {{c:t-battles}}
+
+XVM-2.3.1:
+  * fix 2.3 release bugs
+
+XVM-2.3:
+  * added new vehicles to win chances calculation
+  * fixed bug in swf modification
+  * wot-xvm-proxy: added compression of proxy servers requests
+  * added top 100 icons for RU clans (http://ivanerr.ru/lt/showclansrating/)
+  * default config reworked
+  * config editor: https://sites.google.com/site/sirmaxwiki/xvm-editor
+    (not all is ready, but can be used)
+  * players panel performance optimization on kill
+  * separated settings for section "damageText" for alive and dead, last
+    damage will be shown with settings from section "dead"
+  * dynamically determine maximum request length in depend of game folder
+  * wot-xvm-proxy: swf communication protocol changed
+  * wot-xvm-proxy: check for another instance
+  * fixed text field default settings if not set in config
+  * player/clan icons in vehicle markers
+  * added option battle/useStandardMarkers, that allow to use standard
+    client vehicle markers
+  * editor: set default values
+  * editor: added new config version settings
+  * localization
+
+XVM-2.2:
+  * adaptation to WoT 0.7.3
+  * updated tank info for win chances calculation
+  * vehicle type marker settings may be different for each state
+  * empty clan name for showing icons for players without clan
+  * in dynamic color "value":0 defines color for not loaded statistic
+  * added top clans icons to default configs
+  * fixed bug with enemy team killer
+  * added config options for separate clan icon coordinates at right size
+  * added Lite configs without statistics options
+  * wot-xvm-proxy: icon changed (thanks to Vadim M.)
+  * own player icons subsection for each server region in config
+  * reorder clanicons folder
+  * config version increased: 1.2.0 => 1.3.0, because section "players" was
+    changed
+  * add some more european clans
+  * added alternative proxy servers
+
+XVM-2.1.1:
+  * fixed bug - missed vehicle name in players panel
+
+XVM-2.1:
+  * do not show warning when config is absent.
+  * added separated parameters for clan/player icons:
+      battleLoading/clanIcon: for battle loading screen
+      statisticForm/clanIcon: for battle statistics (when Tab pressed)
+      playersPanel/clanIcon: for players panel
+  * fixed health bar animation
+  * added option battle/removePanelsModeSwitcher for removing panel switcher
+  * battle loading screen fields alignment
+  * added parameter "removeSquadIcon" for ability of removing squad icon from
+    battle loading screen, players panel and Tab key statistic form
+  * fixed dynamic transparency
+  * fixed player/clan icon in players panel
+  * show win chances in statistic form (work only in 15x15 battles)
+  * added configs like in standard client
+  * fixes in win chances formulas
+  * fixed bug when dead enemy tank still have tank icon active.
+  * remove empty space in large mode of players panel when squad icon is disabled
+  * dynamic color and transparency for all health bar elements in all states
+  * optimization of macros with dynamic values
+  * fixed health bar z-order
+  * optimization of player/clan icon
+  * wot-xvm-proxy: added new command line parameter "/noauto" for disabling
+    auto running the game
+  * added 'name' option for text fields in config
+  * fixed default configs
+  * added option to hide xvm version at top left corner of screen
+  * players panels and statistic form optimization (avoid lags)
+  * proxy server for EU client is changed
+  * added config with English comments
+
+XVM-2.0:
+  * adaptation to WoT 0.7.2
+  * mod distribution model changed:
+      xvm-lite package for mod without players ratio
+      xvm-full package for mod with players ratio
+  * dynamic color optimization
+  * added {{level}} macro for vehicle level
+  * always use 'alive' color for damage text with system colors
+  * added clock to battle loading screen (can be disabled in config)
+  * macros optimization
+  * shadows quality improved
+  * advanced in-game error reporting
+  * text formats in battleLoading, statisticForm and playersPanel split to
+    left and right
+  * config changed to version 1.2.0. Parameters moved:
+      rating/battleLoading => battleLoading
+      rating/statisticForm => statisticForm
+      rating/playersPanel => playersPanel
+      battle/battleLoadingShowClock => battleLoading/showClock
+      battle/playersPanelAlpha => playersPanel/alpha
+      battle/playersPanelLargeWidth => playersPanel/large/width
+  * configurable system colors (section colors/system in XVM.xvmconf)
+    working with all elements except vehicle type markers
+  * configurable formats for name and vehicle text fields in players panel
+  * darker color for dead or not loaded players in players panel
+  * icons transparency in players panel (parameter playersPanel/iconAlpha)
+  * players panel field width changing
+  * automatically select the fastest server to connect (currently useful
+    only for China servers)
+  * added icon sets ("iconset" config section)
+  * player/clan icons added
+  * Win chances calculation added
+  * many other fixes
+
+XVM-1.7:
+  * merge configs in XVM.xvmconf (with legacy support of OTMData.xml)
+  * config version increased to 1.1.0 (with backward compatibility)
+  * integrate default config in code
+  * added samples configs: \xvm-doc\samples
+  * config usage optimization (avoid freezes)
+  * optimized text fields creation and usage
+  * extended config parsing error reporting at battle loading
+  * increased width of vehicle fields in BattleLoading and StatisticForm
+  * fixed bug with endless loop when PlayersPanel width is too small
+  * fixed player names cutting
+  * added new macros for dynamic colors in vehicle markers:
+    {{c:hp}}, {{c:hp-ratio}}
+  * added macros of dynamic transparency:
+    {{a:hp}}, {{a:hp-ratio}}
+  * changed JSON parser to fixed version, than is 10x faster that internal
+  * wot-xvm-proxy: added autodetection of game version: RU, EU, US, CN1
+  * wot-xvm-proxy: added command line options /? and /help for displaying
+    usage information
+  * wot-xvm-proxy: added command line option /server=(RU|EU|US|CN1|CN2) for
+    overriding autodetection
+  * wot-xvm-proxy: added china servers support
+  * wot-xvm-proxy: added extended debug information with /debug option
+  * fixed bug with parsing empty stat data
+  * fixed initial icon positioning
+  * fixed fields size and position in battle loading screen
+  * fixed contour icon color
+  * many other bugs fixed
+
+XVM-1.6:
+  * Speed optimization
+  * Grid modified
+  * Fixed .stat link check at startup
+  * Fixed players names shifting in large panels
+  * Fixed transaprency error (playersPanelAlpha = 0)
+  * Cut nick with disabled statistics in large mode
+  * Fixed 'null' when data is not available
+  * Fixed vehicle level position with disabled mirroring
+  * Added option to load enemy stats in Fog of War (experimental).
+  * Some other bugs fixed
+
+XVM-1.5:
+  * Fixed playing replays with spaces in the file name
+  * Fixed damage fading in health bar
+  * Configurable players panel transparency
+  * Set players names width in panels in large mode
+  * Some other bugs fixed
+
+XVM-1.4:
+  * Working only with player id
+  * Macroses was added in markers: {{kb}}, {{battles}}, {{wins}}, {{eff}}, {{rating}}
+  * Statistics formatting added
+  * Added macroses for dynamic colors: {{c:eff}}, {{c:rating}}, {{c:kb}}
+  * Config parameter changed:
+      rating/playersPanel/colorizeMiddle -> rating/playersPanel/middleColor
+  * Added section 'rating/colors' into config for setting up border values
+    and color values for dynamic colors
+  * fixed PostmortemTips hiding
+  * added new version notification at battle loading screen
+  * Config parameter renamed and behavoir inverted to avoid mistakes:
+      battle/disableMirroredVehicleIcons -> battle/mirroredVehicleIcons
+  * Force stats loading after 1 sec (for 12x12 battles or FogOfWar)
+  * Added stat macros: {kb:3}}, {{rating:3}}, {{eff:4}} - useful for aligning columns
+    using monospace fonts
+
+XVM-1.3:
+  * Simple installation. Added wot-xvm-proxy.exe.
+  * It is able to work with id or nicks.
+
+XVM-1.2:
+  * Comments was added to config file XVM.xvmconf
+  * Proxy server and protocol are changed
+  * XML was changed to JSON (except legacy OTMData.xml)
+
+XVM-1.1:
+  * fixed ally health bar color with system colors
+
+XVM-1.0:
+  First release

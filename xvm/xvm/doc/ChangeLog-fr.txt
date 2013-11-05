@@ -1,0 +1,57 @@
+﻿XVM-5.0.0-test5:
+  [NOUVEAUTÉS]
+  * ajout de la possibilité de modifier le format du type de véhicule dans les panels d'équipes :
+      squad/formatInfoField
+  * ajout de la possibilité de configurer différents sets d'icônes pour les panneaux à droite et à gauche et
+    les marqueurs alliés et ennemis :
+      iconset/battleLoadingAlly, iconset/battleLoadingEnemy - pour l'écran de chargement
+      iconset/playersPanelAlly, iconset/playersPanelEnemy   - pour le panneau des joueurs
+      iconset/statisticFormAlly, iconset/statisticFormEnemy - pour la fenêtre TAB
+      iconset/vehicleMarkerAlly, iconset/vehicleMarkerEnemy - pour les marqueurs des tanks
+  * traduction : ajout du Serbe
+
+  [MACROS]
+  * équipes : ajout des macros {{level}}, {{rlevel}}, {{vtype}}, {{battletier-min}} et {{battletier-max}}
+
+  [AUTRES]
+  * équipes : suppressions des options "romanNumbers", "leftLvlBorder" et "rightLvlBorder"
+  * renommage des champs dans iconset: "battleLoading", "playersPanel", "statisticForm" et "vehicleMarker"
+
+
+XVM-5.0.0-test4:
+  * adaptations pour WoT 0.8.8
+
+  [NOUVEAUTÉS]
+  * ajout de la possibilité de modifier le champ 'pseudpo' dans 'battleLoading' (écran de chargement) :
+    formatLeftNick, formatRightNick
+  * nouvelles options :
+    login/skipIntro - passe la vidéo d'introduction du jeu au démarrage
+    login/autologin - se connecte automatiquement
+    userInfo/startPage - page initiale de la fenêtre userinfo (état de service), par défaut : 4
+    battleResults/showNetIncome - affiche le bénéfice net en crédits dans l'écran après la bataille
+    battleResults/showExtendedInfo - affiche la précision des tirs et les dégâts dans l'écran après la bataille
+    userInfo/defaultFilterValue - default value for the filter text input
+  * pinger : ajout du support de Wine. Pour l'activer, lancez :
+    ln -s `which ping` ~/.wine/drive_c/ping.exe
+  * traduction : ajout du Roumain, du Bulgare, du Dannois, de l'Italien et du Turc.
+  * traduction : ajout des fichiers 'readme' (lisez-moi) polonais et français
+
+  [MACROS]
+  * ajout des macros {{c:avglvl}} et {{a:avglvl}}
+
+  [CORRECTIONS]
+  * correction du mauvais positionnement de l'icône 'sixième sens'
+  * minimap : correction de la mauvaise couleur des ennemis teamkillers
+  * marqueurs : correction de la couleur des types de véhicules coulés
+
+  [AUTRES]
+  * nouvelle plateforme : AS3 + Python
+  * xvm-stat, Dokan and .NET Framework ne sont désormais plus requis. Merci de supprimer xvm-stat.exe.
+  * suppression du classement TWR
+  * version de la configuration passée en 5.0.0
+  * les statistiques sont désormais désactivées par défaut
+  * changement du format d'affichage de l'heure dans battleloading (http://php.net/date)
+  * configuration : section "finalStatistic" renomée en "battleResults"
+  * suppression de l'option battleResults/sortColumn, inclut directement depuis la 0.8.8
+  * suppression des options login/showPingOnGameLoading et userInfo/showEColumn
+  * renommage des champs formatLeft/Right dans battleloading
