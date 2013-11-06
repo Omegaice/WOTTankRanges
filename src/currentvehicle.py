@@ -224,70 +224,6 @@ class _CurrentVehicle():
 
             xvm_conf = json.loads(data)
 
-        # Make sure we have the correct defaults
-        if not "tankrange" in xvm_conf:
-            xvm_conf["tankrange"] = {}
-
-        if not "logging" in xvm_conf["tankrange"]:
-            xvm_conf["tankrange"]["logging"] = True
-
-        if not "ignore_artillery" in xvm_conf["tankrange"]:
-            xvm_conf["tankrange"]["ignore_artillery"] = False
-
-        if not "circle_view" in xvm_conf["tankrange"]:
-            xvm_conf["tankrange"]["circle_view"] =  {
-                "enabled": True,
-                "color": "0xFFFFFF",
-                "alpha": 50,
-                "thickness": 0.5,
-                "filled": False
-            }
-
-        if not "circle_binocular" in xvm_conf["tankrange"]:
-            xvm_conf["tankrange"]["circle_binocular"] =  {
-                "enabled": True,
-                "color": "0xFFFFFF",
-                "alpha": 50,
-                "thickness": 0.5,
-                "filled": False
-            }
-
-        if not "circle_artillery" in xvm_conf["tankrange"]:
-            xvm_conf["tankrange"]["circle_artillery"] =  {
-                "enabled": True,
-                "color": "0xFF0000",
-                "alpha": 50,
-                "thickness": 0.5,
-                "filled": False
-            }
-
-        # 1.4 -> 1.5 Updated Confg Options
-        if not "filled" in xvm_conf["tankrange"]["circle_view"]:
-            xvm_conf["tankrange"]["circle_view"]["filled"] = False
-
-        if not "filled" in xvm_conf["tankrange"]["circle_binocular"]:
-            xvm_conf["tankrange"]["circle_binocular"]["filled"] = False
-
-        if not "filled" in xvm_conf["tankrange"]["circle_artillery"]:
-            xvm_conf["tankrange"]["circle_artillery"]["filled"] = False
-
-        # 1.5 -> 1.6 Updated Config Options
-        if not "spotting_limit" in xvm_conf["tankrange"]:
-            xvm_conf["tankrange"]["spotting_limit"] = True
-
-        # Setup Circles Dictionary
-        if not "circles" in xvm_conf:
-            xvm_conf["circles"] = { "enabled": True }
-
-        if not "major" in xvm_conf["circles"]:
-            xvm_conf["circles"]["major"] = [
-                { "enabled": False, "distance": 445, "thickness": 0.75, "alpha": 45, "color": "0xFFCC66" },
-                { "enabled": False, "distance": 50, "thickness": 1.00, "alpha": 100, "color": "0xFFFFFF" }
-            ]
-
-        if not "special" in xvm_conf["circles"]:
-            xvm_conf["circles"]["special"] = {}
-
         # Get name
         tank_name = g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.name.split(":")[1].lower().replace("-","_")
         if xvm_conf["tankrange"]["logging"]:
@@ -407,7 +343,7 @@ class _CurrentVehicle():
         if xvm_conf["tankrange"]["circle_view"]["enabled"]:
             if xvm_conf["tankrange"]["spotting_limit"]:
                 view_distance = min(445, view_distance);
-                
+
             if not xvm_conf["tankrange"]["circle_view"]["filled"]:
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_view" }, "distance": view_distance } })
             else:
