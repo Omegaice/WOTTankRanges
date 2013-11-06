@@ -1,4 +1,3 @@
-# Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
 from Event import Event
 from items import vehicles
@@ -24,7 +23,6 @@ class _CurrentVehicle():
         self.onChanged = Event()
         self.onChangeStarted = Event()
         self.__crew = {}
-        return
 
     def init(self):
         g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate,
@@ -61,7 +59,6 @@ class _CurrentVehicle():
 
         if self.isPresent():
             self.__updateViewRange()
-        return
 
     def onLocksUpdate(self, locksDiff):
         if self.__vehInvID in locksDiff:
@@ -90,6 +87,9 @@ class _CurrentVehicle():
     def isBroken(self):
         return self.isPresent() and self.item.isBroken
 
+    def isDisabledInRoaming(self):
+        return self.isPresent() and self.item.isDisabledInRoaming
+
     def isLocked(self):
         return self.isPresent() and self.item.isLocked
 
@@ -117,6 +117,19 @@ class _CurrentVehicle():
     def isReadyToFight(self):
         return self.isPresent() and self.item.isReadyToFight
 
+    def isAutoLoadFull(self):
+        if self.isPresent() and self.item.isAutoLoad:
+            for shell in self.item.shells:
+                if shell.count != shell.defaultCount:
+                    return False
+
+        return True
+
+    def isAutoEquipFull(self):
+        if self.isPresent() and self.item.isAutoEquip:
+            return self.item.eqs == self.item.eqsLayout
+        return True
+
     def selectVehicle(self, vehInvID = 0):
         vehicle = g_itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
@@ -138,19 +151,18 @@ class _CurrentVehicle():
         return (MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
 
     def __selectVehicle(self, vehInvID):
-        if vehInvID != self.__vehInvID:
-            Waiting.show('updateCurrentVehicle', isSingle=True)
-            self.onChangeStarted()
-            self.__vehInvID = vehInvID
-            AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
-            self.refreshModel()
-            if not self.__changeCallbackID:
-                self.__changeCallbackID = BigWorld.callback(0.1, self.__changeDone)
+        if vehInvID == self.__vehInvID:
+            return
+        Waiting.show('updateCurrentVehicle', isSingle=True)
+        self.onChangeStarted()
+        self.__vehInvID = vehInvID
+        AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
+        self.refreshModel()
+        if not self.__changeCallbackID:
+            self.__changeCallbackID = BigWorld.callback(0.1, self.__changeDone)
 
         if self.isPresent():
             self.__updateViewRange()
-
-        return
 
     def __updateViewRange(self):
         # Set Defaults
@@ -458,7 +470,6 @@ class _CurrentVehicle():
         if self.__changeCallbackID is not None:
             BigWorld.cancelCallback(self.__changeCallbackID)
             self.__changeCallbackID = None
-        return
 
     def __checkPrebattleLockedVehicle(self):
         clientPrb = prb_control.getClientPrebattle()
@@ -477,6 +488,5 @@ class _CurrentVehicle():
 
     def __repr__(self):
         return 'CurrentVehicle(%s)' % str(self.item)
-
 
 g_currentVehicle = _CurrentVehicle()
