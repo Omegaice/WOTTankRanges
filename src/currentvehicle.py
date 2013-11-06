@@ -271,6 +271,10 @@ class _CurrentVehicle():
         if not "filled" in xvm_conf["tankrange"]["circle_artillery"]:
             xvm_conf["tankrange"]["circle_artillery"]["filled"] = False
 
+        # 1.5 -> 1.6 Updated Config Options
+        if not "spotting_limit" in xvm_conf["tankrange"]:
+            xvm_conf["tankrange"]["spotting_limit"] = True
+
         # Setup Circles Dictionary
         if not "circles" in xvm_conf:
             xvm_conf["circles"] = { "enabled": True }
@@ -388,6 +392,9 @@ class _CurrentVehicle():
         # Add binocular Circles
         if xvm_conf["tankrange"]["circle_binocular"]["enabled"] and binoculars:
             binocular_distance = view_distance * 1.25
+            if xvm_conf["tankrange"]["spotting_limit"]:
+                binocular_distance = min(445, binocular_distance);
+
             if not xvm_conf["tankrange"]["circle_binocular"]["filled"]:
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_binocular" }, "distance": binocular_distance } })
             else:
@@ -398,6 +405,9 @@ class _CurrentVehicle():
             view_distance = min(view_distance * 1.1, 500)
 
         if xvm_conf["tankrange"]["circle_view"]["enabled"]:
+            if xvm_conf["tankrange"]["spotting_limit"]:
+                view_distance = min(445, view_distance);
+                
             if not xvm_conf["tankrange"]["circle_view"]["filled"]:
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_view" }, "distance": view_distance } })
             else:
