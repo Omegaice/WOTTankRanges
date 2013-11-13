@@ -25,8 +25,10 @@ class _CurrentVehicle():
         self.__crew = {}
 
     def init(self):
-        g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate,
-         'cache.vehsLock': self.onLocksUpdate})
+        g_clientUpdateManager.addCallbacks({
+            'inventory': self.onInventoryUpdate,
+            'cache.vehsLock': self.onLocksUpdate
+        })
         prbVehicle = self.__checkPrebattleLockedVehicle()
         storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         self.selectVehicle(prbVehicle or storedVehInvID)
@@ -49,13 +51,16 @@ class _CurrentVehicle():
             isVehicleDescrChanged = not isVehicleSold
         if isVehicleSold or self.__vehInvID == 0:
             self.selectVehicle()
-        elif 'repair' in vehsDiff:
-            isRepaired = self.__vehInvID in vehsDiff['repair']
-            if not GUI_ITEM_TYPE.TURRET in invDiff:
-                isComponentsChanged = GUI_ITEM_TYPE.GUN in invDiff
-                isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive, vehsDiff.itervalues())) > 0
-                (isComponentsChanged or isRepaired or isVehicleDescrChanged) and self.refreshModel()
-            (isVehicleChanged or isRepaired) and self.onChanged()
+        else:
+            isRepaired = False
+            if 'repair' in vehsDiff:
+                isRepaired = self.__vehInvID in vehsDiff['repair']
+            isComponentsChanged = GUI_ITEM_TYPE.GUN in invDiff or GUI_ITEM_TYPE.TURRET in invDiff
+            isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive, vehsDiff.itervalues())) > 0
+            if isComponentsChanged or isRepaired or isVehicleDescrChanged:
+                self.refreshModel()
+            if isVehicleChanged or isRepaired:
+                self.onChanged()
 
         if self.isPresent():
             self.__updateViewRange()
