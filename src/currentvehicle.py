@@ -229,6 +229,12 @@ class _CurrentVehicle():
         if xvm_conf["tankrange"]["logging"]:
             LOG_NOTE("Tank Name: ", tank_name)
 
+        # Only update when we have a crew
+        if not self.isCrewFull():
+            if xvm_conf['tankrange']['logging']:
+                LOG_NOTE('no full crew')
+            return
+
         # Remove current circles
         remaining = []
         for tank_data in xvm_conf["circles"]["special"]:
