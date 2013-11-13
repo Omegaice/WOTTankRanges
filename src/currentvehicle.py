@@ -272,7 +272,15 @@ class _CurrentVehicle():
             LOG_NOTE("Ventilation Found")
 
         # Check for Consumable
-        consumable = self.__isConsumableEquipped("ration")
+        consumable = False
+        if self.__isConsumableEquipped("ration"):
+            consumable = True
+        if self.__isConsumableEquipped("chocolate"):
+            consumable = True
+        if self.__isConsumableEquipped("cocacola"):
+            consumable = True
+        if self.__isConsumableEquipped("hotCoffee"):
+            consumable = True
         if xvm_conf["tankrange"]["logging"] and consumable:
             LOG_NOTE("Premium Consumable Found")
 
