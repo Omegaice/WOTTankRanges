@@ -5,7 +5,7 @@ from helpers import isPlayerAccount
 from adisp import async, process
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui import prb_control
+from gui import prb_control, SystemMessages
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -172,6 +172,7 @@ class _CurrentVehicle():
     def __updateViewRange(self):
         # Set Defaults
         xvm_conf = {}
+        saveConfig = False
 
         # Load configuration
         xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
@@ -232,6 +233,12 @@ class _CurrentVehicle():
         # Code for migrating old configuration files (v1.5->v1.6)
         if not xvm_conf["tankrange"].has_key("spotting_limit"):
             xvm_conf["tankrange"]["spotting_limit"] = True
+            saveConfig = True
+
+        # Code for migrating old configuration files (v1.7->v1.8)
+        if not xvm_conf["tankrange"].has_key("notify_changes"):
+            xvm_conf["tankrange"]["notify_changes"] = True
+            saveConfig = True
 
         # Get name
         tank_name = g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.name.split(":")[1].lower().replace("-","_")
@@ -246,9 +253,13 @@ class _CurrentVehicle():
 
         # Remove current circles
         remaining = []
+        oldCircles = {}
         for tank_data in xvm_conf["circles"]["special"]:
             if tank_data.keys()[0] != tank_name:
                 remaining.append(tank_data)
+            elif tank_data[tank_name].has_key('distance') and tank_data[tank_name].has_key('$ref') and tank_data[tank_name]['$ref'].has_key('path'):
+                oldCircles[tank_data[tank_name]['$ref']['path']] = tank_data[tank_name]['distance']
+
         xvm_conf["circles"]["special"] = remaining
 
         # Get type
@@ -349,6 +360,7 @@ class _CurrentVehicle():
             LOG_NOTE("Final View Range: ", view_distance)
 
         # Add binocular Circles
+        binocular_distance = None
         if xvm_conf["tankrange"]["circle_binocular"]["enabled"] and binoculars:
             binocular_distance = view_distance * 1.25
             if xvm_conf["tankrange"]["spotting_limit"]:
@@ -358,6 +370,14 @@ class _CurrentVehicle():
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_binocular" }, "distance": binocular_distance } })
             else:
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_binocular" }, "thickness": (binocular_distance*0.25)-14, "distance": binocular_distance*0.5 } })
+
+            # store only when changes
+            if not oldCircles.has_key("tankrange.circle_binocular") or float(oldCircles["tankrange.circle_binocular"]) != binocular_distance:
+                saveConfig = True
+
+        # Remove old circles
+        elif oldCircles.has_key("tankrange.circle_binocular"):
+            saveConfig = True
 
         # Add standard Circles
         if coated_optics == True:
@@ -372,10 +392,17 @@ class _CurrentVehicle():
             else:
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_view" }, "thickness": (view_distance*0.25)-14, "distance": view_distance*0.5 } })
 
+            # store only when changes
+            if not oldCircles.has_key("tankrange.circle_view") or float(oldCircles["tankrange.circle_view"]) != view_distance:
+                saveConfig = True
+
+        # Remove old circles
+        elif oldCircles.has_key("tankrange.circle_view"):
+            saveConfig = True
 
         # Add Artillery Range
+        artillery_range = 0
         if xvm_conf["tankrange"]["circle_artillery"]["enabled"] and "SPG" in g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.tags:
-            artillery_range = 0
             for shell in g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.gun["shots"]:
                 artillery_range = max(artillery_range, round(math.pow(shell["speed"],2) / shell["gravity"]))
 
@@ -387,10 +414,30 @@ class _CurrentVehicle():
             else:
                 xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_artillery" }, "thickness": (artillery_range*0.25)-14, "distance": artillery_range*0.5 } })
 
+            # store only when changes
+            if not oldCircles.has_key("tankrange.circle_artillery") or float(oldCircles["tankrange.circle_artillery"]) != artillery_range:
+                saveConfig = True
+
+        # Remove old circles
+        elif oldCircles.has_key("tankrange.circle_artillery"):
+            saveConfig = True
+
         # Write result
-        f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
-        f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2, sort_keys=True)))
-        f.close()
+        if saveConfig:
+            if xvm_conf["tankrange"]["logging"]:
+                LOG_NOTE("write config")
+            f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
+            f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2, sort_keys=True)))
+            f.close()
+
+        # notify changes
+        if saveConfig and xvm_conf["tankrange"]["notify_changes"]:
+            msg = "{0}: View Distance: {1}m".format(g_itemsCache.items.getVehicle(self.__vehInvID).userName, round(view_distance,1) )
+            if binocular_distance:
+                msg += " +Binoculars: {0}m".format( round(binocular_distance,1) )
+            if artillery_range:
+                msg += " Firing Range: {0}m".format( round(artillery_range,1) )
+            SystemMessages.pushMessage(msg, type=SystemMessages.SM_TYPE.Information)
 
     @process
     def __updateCrew(self):
