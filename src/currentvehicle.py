@@ -306,6 +306,8 @@ class _CurrentVehicle():
             for name, data in self.__crew.iteritems():
                 if "brotherhood" not in data["skill"]:
                     brothers_in_arms = False
+                elif data["skill"]["brotherhood"] != 100:
+                    brothers_in_arms = False
 
         if xvm_conf["tankrange"]["logging"] and brothers_in_arms:
             LOG_NOTE("BIA Found")
