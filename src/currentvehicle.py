@@ -249,7 +249,7 @@ class _CurrentVehicle():
             saveConfig = True
 
         # Get name
-        tank_name = g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.name.split(":")[1].lower().replace("-","_")
+        tank_name = g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.name.replace(":","-")
         if xvm_conf["tankrange"]["logging"]:
             LOG_NOTE("Tank Name: ", tank_name)
 
