@@ -152,7 +152,6 @@ class _CurrentVehicle():
             else:
                 vehInvID = 0
         self.__selectVehicle(vehInvID)
-        return
 
     def selectNoVehicle(self):
         self.__selectVehicle(0)
@@ -509,7 +508,6 @@ class _CurrentVehicle():
                         vehicle = g_itemsCache.items.getItemByCD(vehDescr.type.compactDescr)
                         if vehicle is not None:
                             return vehicle.invID
-
         return 0
 
     def __repr__(self):
