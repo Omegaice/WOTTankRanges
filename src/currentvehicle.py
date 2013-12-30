@@ -5,7 +5,7 @@ from helpers import isPlayerAccount
 from adisp import async, process
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui import prb_control, SystemMessages
+from gui import prb_control, game_control, SystemMessages
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -29,6 +29,7 @@ class _CurrentVehicle():
             'inventory': self.onInventoryUpdate,
             'cache.vehsLock': self.onLocksUpdate
         })
+        game_control.g_instance.igr.onIgrTypeChanged += self.onIgrTypeChanged
         prbVehicle = self.__checkPrebattleLockedVehicle()
         storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         self.selectVehicle(prbVehicle or storedVehInvID)
@@ -39,8 +40,12 @@ class _CurrentVehicle():
         self.onChanged.clear()
         self.onChangeStarted.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
+        game_control.g_instance.igr.onIgrTypeChanged -= self.onIgrTypeChanged
         g_hangarSpace.removeVehicle()
         self.selectNoVehicle()
+
+    def onIgrTypeChanged(self, *args):
+        self.refreshModel()
 
     def onInventoryUpdate(self, invDiff):
         vehsDiff = invDiff.get(GUI_ITEM_TYPE.VEHICLE, {})
@@ -55,9 +60,12 @@ class _CurrentVehicle():
             isRepaired = False
             if 'repair' in vehsDiff:
                 isRepaired = self.__vehInvID in vehsDiff['repair']
+            isCustomizationChanged = False
+            if 'igrCustomizationsLayout' in vehsDiff:
+                isCustomizationChanged = self.__vehInvID in vehsDiff['igrCustomizationsLayout']
             isComponentsChanged = GUI_ITEM_TYPE.GUN in invDiff or GUI_ITEM_TYPE.TURRET in invDiff
             isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive, vehsDiff.itervalues())) > 0
-            if isComponentsChanged or isRepaired or isVehicleDescrChanged:
+            if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
                 self.refreshModel()
             if isVehicleChanged or isRepaired:
                 self.onChanged()
@@ -241,7 +249,7 @@ class _CurrentVehicle():
             saveConfig = True
 
         # Get name
-        tank_name = g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.name.split(":")[1].lower().replace("-","_")
+        tank_name = g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.type.name.replace(":","-")
         if xvm_conf["tankrange"]["logging"]:
             LOG_NOTE("Tank Name: ", tank_name)
 
