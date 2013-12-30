@@ -4,31 +4,33 @@
 {
   "locale": {
     // Author of translation
-    "XVM_translator": "wRR",
+    "XVM_translator": "XVM Team, wRR, shogomad, jerry1333",
 
     // Ping
-    "Initialization": "Initialization",
+    "Initialization": "Inicjalizacja",
 
     // BattleLoading
-    "New version available": "New version available",
+    "New version available": "Nowa wersja dostępna",
 
     // Win chance
     "Chance error": "Szansa (błąd)",
     "Chance to win": "Szansa na zwycięstwo",
     "global": "globalnie",
     "per-vehicle": "per-pojazd",
+    "chanceExperimental": "exp",
+    "chanceBattleTier": "T",
 
     // Hitlog
     "attack": "atak",
-    "fire": "pożar",
+    "fire": "ogień",
     "ramming": "taranowanie",
     "world_collision": "upadek",
-    "Hits": "Hits",
-    "Total": "Total",
-    "Last": "Last",
+    "Hits": "Trafienia",
+    "Total": "Łącznie",
+    "Last": "Ostatnie",
 
     // Hp Left
-    "hpLeftTitle": "Hitpoints left:",
+    "hpLeftTitle": "Pozostałe punkty życia:",
 
     // Capture
     "enemyBaseCapture": "Opanowanie bazy przeciwnika!",
@@ -40,62 +42,50 @@
 
     // BattleResults
     "Hit percent": "Procent trafień",
-    "Damage upon detecting": "Uszkodzenia z wykrycia",
-    "Damage dealt": "Uszkodzenia zadane",
+    "Damage (assisted / own)": "Obrażenia (asysta / własne)",
 
     // TeamRenderers
-    "TeamRenderersHeaderTip": "Ranking XWN albo XEFF.\nZeby zobaczyć szczegółowe informacje, przesuń kursor myszy na nick gracza.",
     "Friend": "Przyjaciel",
     "Ignored": "Ignorowany",
+    "unknown": "nieznany",
+    "Fights": "Walki",
+    "Wins": "Wygrane",
+    "Data was updated at": "Dane zaktualizowano",
     "Load statistics": "Pokaż statystyki",
-    "enabled": "włączono",
-    "disabled": "wyłączono",
 
     // UserInfo
-    "UserInfoEHint": "Wydajność per-pojazd.\nPokazywane wartości aktualne na dzień: \u0025DATE\u0025\nZobacz aktualne wartości w szczegółach pojazdu.\nDokladnosc statystyk zależy od jakości pobranych danych.",
-    "Data was updated at": "Dane zaktualizowano",
-    " to ": " do ",
+    "General stats": "Ogólne statystyki",
+    "Summary": "Podsumowanie",
+    "Avg level": "Śr. poziom",
+    "WN6": "WN6",
     "EFF": "EFF",
     "updated": "zaktualizowano",
-    "unknown": "nieznano",
-    "Avg level": "Śr. poziom",
-    "Spotted": "Wykrycie",
-    "Defence": "Obrona",
-    "Capture": "Okupacja",
-    "player (average / top)": "własne (średnie / top)",
-    "Spec dmg": "Spec dmg",
-
-    // UserInfo - filters
-    "Filter": "Filtr",
-    "All tanks": "Wszystkie",
-    "Show all tanks in the game": "Pokaż wszystkie pojazdy w grze",
-    "Player tanks": "Pojazdy gracza",
-    "Show all tanks played": "Pokaż wszystkie pojazdy gracza",
-    "In hangar": "W garażu",
-    "Show only tanks in own hangar": "Pokaż pojazdy z własnego garażu",
-
-    // UserInfo - buttons
-    "Level": "Poziom",
-    "Type": "Typ",
-    "Nation": "Nacja",
-    "Name": "Nazwa",
-    "Fights": "Bitwy",
-    "Wins": "Zwyc.",
+    " to ": " do ",
+    "avg": "średnie",
+    "top": "top",
+    "draws": "remisy",
+    "Specific damage (Avg dmg / HP)": "Spec dmg (Średnie dmg / HP)",
+    "Capture points": "Punkty okupacji",
+    "Defence points": "Punkty obrony",
+    "Filter": "Filter",
 
     // Crew
     "PutOwnCrew": "Obsadź załogę (własna)",
     "PutBestCrew": "Obsadź załogę (najlepsza)",
-    "PutClassCrew": "Put same class crew",
-
+    "PutClassCrew": "Obsadź członka załogi tej samej klasy",
+    
     // Squad
     "Vehicle": "Pojazd",
     "Battle tiers": "Poziom pojazdów w bitwie",
+    "Type": "Typ",
+    "Nation": "Nacja",
     "ussr": "ZSSR",
     "germany": "Niemcy",
     "usa": "USA",
     "france": "Francja",
     "uk": "Wielka Brytania",
     "china": "Chiny",
+    "japan": "Japonia",
     "HT": "HT",
     "MT": "MT",
     "LT": "LT",
@@ -103,6 +93,6 @@
     "SPG": "SPG",
 
     // VehicleMarkersManager
-    "blownUp": "Blown-up!"
+    "blownUp": "Zniszczony!"
   }
 }

@@ -42,7 +42,7 @@
 
     // BattleResults
     "Hit percent": "Trefferquote",
-    "Damage (assisted / own)": "Schaden (Aufklärung / Verursacht)",
+    "Damage (assisted / own)": "Schaden (ermöglicht / verursacht)",
 
     // TeamRenderers
     "Friend": "Freund",
@@ -54,6 +54,7 @@
     "Load statistics": "Lade Statistiken",
 
     // UserInfo
+    "General stats": "Allgemeine Statistik",
     "Summary": "Zusammenfassung",
     "Avg level": "Ø-Stufe",
     "WN6": "WN6",
