@@ -41,6 +41,13 @@
       "filled": false, 
       "thickness": 0.5
     }, 
+    "circle_shell": {
+      "alpha": 50, 
+      "color": "0x00FF00", 
+      "enabled": true, 
+      "filled": false, 
+      "thickness": 0.5
+    },
     "ignore_artillery": false, 
     "logging": false, 
     "spotting_limit": true

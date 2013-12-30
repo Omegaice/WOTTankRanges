@@ -431,6 +431,29 @@ class _CurrentVehicle():
         elif oldCircles.has_key("tankrange.circle_artillery"):
             saveConfig = True
 
+        # Add Artillery Range
+        shell_range = 0
+        if xvm_conf["tankrange"]["circle_shell"]["enabled"]:
+            for shell in g_itemsCache.items.getVehicle(self.__vehInvID).descriptor.gun["shots"]:
+                shell_range = max(shell_range, shell["maxDistance"])
+
+            if xvm_conf["tankrange"]["logging"]:
+                LOG_NOTE("Calculated Shell Range:", shell_range)
+
+            if shell_range < 445:
+                if not xvm_conf["tankrange"]["circle_shell"]["filled"]:
+                    xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_shell" }, "distance": shell_range } })
+                else:
+                    xvm_conf["circles"]["special"].append({ tank_name: { "$ref": { "path": "tankrange.circle_shell" }, "thickness": (shell_range*0.25)-14, "distance": shell_range*0.5 } })
+
+                # store only when changes
+                if not oldCircles.has_key("tankrange.circle_shell") or float(oldCircles["tankrange.circle_shell"]) != shell_range:
+                    saveConfig = True
+
+        # Remove old circles
+        elif oldCircles.has_key("tankrange.circle_shell"):
+            saveConfig = True
+
         # Write result
         if saveConfig:
             if xvm_conf["tankrange"]["logging"]:
@@ -445,7 +468,9 @@ class _CurrentVehicle():
             if binocular_distance:
                 msg += " +Binoculars: {0}m".format( round(binocular_distance,1) )
             if artillery_range:
-                msg += " Firing Range: {0}m".format( round(artillery_range,1) )
+                msg += " Artillery Range: {0}m".format( round(artillery_range,1) )
+            if shell_range > 0 and shell_range < 445:
+                msg += " Shell Range: {0}m".format( round(shell_range,1) )
             SystemMessages.pushMessage(msg, type=SystemMessages.SM_TYPE.Information)
 
     @process
