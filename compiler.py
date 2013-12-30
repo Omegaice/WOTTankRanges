@@ -1,6 +1,6 @@
 import py_compile, zipfile, os, glob
 
-WOTVersion = "0.8.9"
+WOTVersion = "0.8.10"
 
 # Compile Source
 py_compile.compile("src/currentvehicle.py")
