@@ -346,7 +346,7 @@ class _CurrentVehicle():
 
             # Calculate Situational Awareness Skill
             if "radioman_finder" in data["skill"]:
-                other_bonus *= 1.0 + ( 0.0002 * data["skill"]["radioman_finder"] )
+                other_bonus *= 1.0 + ( 0.0003 * data["skill"]["radioman_finder"] )
 
                 if xvm_conf["tankrange"]["logging"]:
                     LOG_NOTE("Situational Awareness Bonus: ", 1.0 + ( 0.0003 * data["skill"]["radioman_finder"] ))
