@@ -1,11 +1,12 @@
 import BigWorld
+import random
 from Event import Event
 from items import vehicles
 from helpers import isPlayerAccount
 from adisp import async, process
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui import prb_control, game_control, SystemMessages
+from gui import prb_control, game_control, g_tankActiveCamouflage, SystemMessages
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -57,14 +58,11 @@ class _CurrentVehicle():
         if isVehicleSold or self.__vehInvID == 0:
             self.selectVehicle()
         else:
-            isRepaired = False
-            if 'repair' in vehsDiff:
-                isRepaired = self.__vehInvID in vehsDiff['repair']
-            isCustomizationChanged = False
-            if 'igrCustomizationsLayout' in vehsDiff:
-                isCustomizationChanged = self.__vehInvID in vehsDiff['igrCustomizationsLayout']
-            isComponentsChanged = GUI_ITEM_TYPE.GUN in invDiff or GUI_ITEM_TYPE.TURRET in invDiff
-            isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive, vehsDiff.itervalues())) > 0
+            isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
+            isCustomizationChanged = 'igrCustomizationsLayout' in vehsDiff and self.__vehInvID in vehsDiff['igrCustomizationsLayout']
+            isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
+            isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive or (self.__vehInvID, '_r') in hive, vehsDiff.itervalues())) > 0
+
             if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
                 self.refreshModel()
             if isVehicleChanged or isRepaired:
@@ -79,9 +77,20 @@ class _CurrentVehicle():
 
     def refreshModel(self):
         if self.isPresent() and self.isInHangar() and self.item.modelState:
+            if not g_tankActiveCamouflage.has_key(self.item.intCD):
+                availableKinds = []
+                currKind = 0
+                for id, startTime, days in self.item.descriptor.camouflages:
+                    if id is not None:
+                        availableKinds.append(currKind)
+                    currKind += 1
+
+                if len(availableKinds) > 0:
+                    g_tankActiveCamouflage[self.item.intCD] = random.choice(availableKinds)
             g_hangarSpace.updateVehicle(self.item)
         else:
             g_hangarSpace.removeVehicle()
+        return
 
     @property
     def invID(self):
@@ -140,7 +149,10 @@ class _CurrentVehicle():
 
     def isAutoEquipFull(self):
         if self.isPresent() and self.item.isAutoEquip:
-            return self.item.eqs == self.item.eqsLayout
+            for i, e in enumerate(self.item.eqsLayout):
+                if e != self.item.eqs[i]:
+                    return False
+
         return True
 
     def selectVehicle(self, vehInvID = 0):
