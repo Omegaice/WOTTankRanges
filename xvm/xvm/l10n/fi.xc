@@ -15,9 +15,9 @@
     // Win chance
     "Chance error": "Todennäköisyyden epävarmuus",
     "Chance to win": "Voittotodennäköisyys",
-    "global": "globaali",
-    "per-vehicle": "ajoneuvokohtainen",
-    "chanceExperimental": "kokeellinen",
+    //"global": "globaali",
+    //"per-vehicle": "ajoneuvokohtainen",
+    "chanceLive": "Live",
     "chanceBattleTier": "T",
 
     // Hitlog
@@ -57,6 +57,7 @@
     "Summary": "Yhteenveto",
     "Avg level": "Keskim. taso",
     "WN6": "WN6",
+    "WN8": "WN8",
     "EFF": "EFF",
     "updated": "päivitetty",
     " to ": " to ",

@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Slovak translation file. Set "language": "sk" in @xvm.xc
  */
 {
   "locale": {
     // Author of translation
-    "XVM_translator": "relic242",
+    "XVM_translator": "relic242, Alfavio",
 
     // Ping
     "Initialization": "Načítanie",
@@ -15,9 +15,9 @@
     // Win chance
     "Chance error": "Chyba",
     "Chance to win": "Šanca na výhru",
-    "global": "celková",
-    "per-vehicle": "podľa vozidiel",
-    "chanceExperimental": "experimentálne",
+    //"global": "celková",
+    //"per-vehicle": "podľa vozidiel",
+    "chanceLive": "Live",
     "chanceBattleTier": "T",
 
     // Hitlog
@@ -58,16 +58,35 @@
     "Summary": "Celkový prehľad",
     "Avg level": "Priem. tier",
     "WN6": "WN6",
+    "WN8": "WN8",
     "EFF": "EFF",
     "updated": "aktualizované",
     " to ": " do ",
     "avg": "priem",
     "top": "naj",
     "draws": "remízy",
+    "Maximum damage": "Maximum poškodenia",
     "Specific damage (Avg dmg / HP)": "Pomer poškodenia (priem. dmg / HP)",
     "Capture points": "Obsadenie",
     "Defence points": "Obrana",
     "Filter": "Filter",
+    "Extra data (WoT 0.8.8+)": "Extra data (WoT 0.8.8+)",
+    "Average battle time": "Priemerný čas bitky",
+    "Average battle time per day": "Priemerný čas bitky na deň",
+    "Battles after 0.8.8": "Bitiek po 0.8.8",
+    "Average experience": "Priemerné skúsenosti",
+    "Average experience without premium": "Priemerné skúsenosti bez prémium účtu",
+    "Average distance driven per battle": "Priemerná najazdená vzďialenosť na bitku",
+    "Average woodcuts per battle": "Priemerné zvalené stromy na bitku",
+    "Average damage assisted": "Priemerné poškodenie asistenciou",
+    "    by tracking": "    zhadzovaním pásov",
+    "    by spotting": "    spotovaním",
+    "Average HE shells fired (splash)": "Priemerne vystrelené HE náboje (splash)",
+    "Average HE shells received (splash)": "Priemerné obdržené HE náboje (splash)",
+    "Average penetrations per battle": "Priemerné penetrácie na bitku",
+    "Average hits received": "Priemerné odovzdané zásahy",
+    "Average penetrations received": "Priemerné odovzdané penetrácie",
+    "Average ricochets received": "Priemerné odovzdané odrazy",
 
     // Crew
     "PutOwnCrew": "Použiť vlastnú posádku",

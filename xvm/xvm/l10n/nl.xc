@@ -15,9 +15,9 @@
     // Win chance
     "Chance error": "Fout kans",
     "Chance to win": "Win kans",
-    "global": "globaal",
-    "per-vehicle": "per voertuig",
-    "chanceExperimental": "exp",
+    //"global": "globaal",
+    //"per-vehicle": "per voertuig",
+    "chanceLive": "Live",
     "chanceBattleTier": "T",
 
     // Hitlog
@@ -58,6 +58,7 @@
     "Summary": "Overzicht",
     "Avg level": "Gemid. niveau",
     "WN6": "WN6",
+    "WN8": "WN8",
     "EFF": "EFF",
     "updated": "geüpdate",
     " to ": " naar ",

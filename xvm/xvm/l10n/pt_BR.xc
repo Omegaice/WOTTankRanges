@@ -15,9 +15,9 @@
     // Win chance
     "Chance error": "Margem de erro",
     "Chance to win": "Chance de vencer",
-    "global": "global",
-    "per-vehicle": "por-veículo",
-    "chanceExperimental": "exp",
+    //"global": "global",
+    //"per-vehicle": "por-veículo",
+    "chanceLive": "Live",
     "chanceBattleTier": "Cat",
 
     // Hitlog
@@ -57,6 +57,7 @@
     "Summary": "Sumário",
     "Avg level": "Nível Méd.",
     "WN6": "WN6",
+    "WN8": "WN8",
     "EFF": "EFF",
     "updated": "atualizado",
     " to ": " para ",

@@ -14,11 +14,11 @@
 
     // Win chance
     "Chance error": "Ошибка расчета шансов",
-    "Chance to win": "Шанс на победу",
-    "global": "общий",
-    "per-vehicle": "по технике",
-    "chanceExperimental": "exp",
-    "chanceBattleTier": "T",
+    "Chance to win": "Шансы на победу",
+    //"global": "общий",
+    //"per-vehicle": "по технике",
+    "chanceLive": "Для живых",
+    "chanceBattleTier": "Уровень боя",
 
     // Hitlog
     "attack": "атака",
@@ -42,7 +42,7 @@
 
     // BattleResults
     "Hit percent": "Процент попаданий",
-    "Damage (assisted / own)": "Урон (по разведданным / свой)",
+    "Damage (assisted / own)": "Урон (с вашей помощью / свой)",
 
     // TeamRenderers
     "Friend": "Друг",
@@ -54,20 +54,39 @@
     "Load statistics": "Загрузить статистику",
 
     // UserInfo
-	"General stats": "Общая статистика",
+    "General stats": "Общая статистика",
     "Summary": "Общие результаты",
-    "Avg level": "Ср. уровень",
+    "Avg level": "Средний уровень",
     "WN6": "WN6",
+    "WN8": "WN8",
     "EFF": "РЭ",
     "updated": "обновлено",
     " to ": " до ",
     "avg": "ср.",
     "top": "топ",
     "draws": "ничьих",
+    "Maximum damage": "Максимальный урон",
     "Specific damage (Avg dmg / HP)": "Уд. урон (ср. урон / прочность)",
     "Capture points": "Очки захвата",
     "Defence points": "Очки защиты",
     "Filter": "Фильтр",
+    "Extra data (WoT 0.8.8+)": "Доп. данные (WoT 0.8.8+)",
+    "Average battle time": "Среднее время жизни в бою",
+    "Average battle time per day": "Среднее время игры в день",
+    "Battles after 0.8.8": "Боев после 0.8.8",
+    "Average experience": "Средний опыт",
+    "Average experience without premium": "Средний опыт без премиума",
+    "Average distance driven per battle": "В среднем пройдено км за бой",
+    "Average woodcuts per battle": "В среднем повалено деревьев за бой",
+    "Average damage assisted": "Средний урон с вашей помощью",
+    "    by tracking": "    после сбития гусеницы",
+    "    by spotting": "    по разведданным",
+    "Average HE shells fired (splash)": "Средний урон фугасами (сплэш)",
+    "Average HE shells received (splash)": "Средний полученный урон фугасами",
+    "Average penetrations per battle": "В среднем пробитий за бой",
+    "Average hits received": "В среднем получено попаданий",
+    "Average penetrations received": "В среднем получено пробитий",
+    "Average ricochets received": "В среднем получено рикошетов",
 
     // Crew
     "PutOwnCrew": "Родной экипаж",

@@ -15,9 +15,9 @@
     // Win chance
     "Chance error": "Fel med vinstchans",
     "Chance to win": "Vinstchans",
-    "global": "global",
-    "per-vehicle": "per-fordon",
-    "chanceExperimental": "exp",
+    //"global": "global",
+    //"per-vehicle": "per-fordon",
+    "chanceLive": "Live",
     "chanceBattleTier": "T",
 
     // Hitlog
@@ -58,12 +58,14 @@
     "Summary": "Sammanfattning",
     "Avg level": "Genomsn. nivå",
     "WN6": "WN6",
+    "WN8": "WN8",
     "EFF": "EFF",
     "updated": "uppdaterat",
     " to ": " till ",
     "avg": "genomsn.",
     "top": "topp",
     "draws": "oavgjorda",
+    "Maximum damage": "Maximal skada",
     "Specific damage (Avg dmg / HP)": "Specifik skada (Genomsn. skada / HP)",
     "Capture points": "Erövringspoäng",
     "Defence points": "Försvarspoäng",
