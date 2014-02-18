@@ -196,58 +196,63 @@ class _CurrentVehicle():
         # Load configuration
         xvm_configuration_file = os.getcwd() + os.sep + 'res_mods' + os.sep + 'xvm' + os.sep + 'tankrange.xc'
         if not os.path.exists(xvm_configuration_file):
-            LOG_NOTE("Configuration file missing (" + xvm_configuration_file + "). Creating.")
+            SystemMessages.pushMessage("Configuration file missing (" + xvm_configuration_file + ")", type=SystemMessages.SM_TYPE.Error)
+            return
         else:
-            data = ""
-            blockComment = False
+            try:
+                data = ""
+                blockComment = False
 
-            f = codecs.open(xvm_configuration_file, 'r', '"utf-8-sig"')
-            for line in f.read().split('\n'):
-                line = line.strip()
-                if line != "":
-                    # Start of block comment
-                    comment = line.find("/*")
-                    if comment != -1 and comment == 0:
-                        blockComment = True
-                        continue
-
-                    # End of block comment
-                    comment = line.find("*/")
-                    if comment != -1:
-                        blockComment = False
-                        continue
-
-                    # Block Comment
-                    if blockComment == True:
-                        continue
-
-                    # Start of line comment
-                    comment = line.find("//")
-                    if comment != -1 and comment == 0:
-                        continue
-
-                    # Remove end of line comments
-                    position = 0
-                    for i in range(0,line.count("//")):
-                        comment = line.find("//", position+2)
-                        if comment != -1:
-                            colon = line.find(":")
-
-                            startSpeach = line.find("\"", colon+1)
-                            if startSpeach > comment:
-                                line = line[:comment].strip()
-
-                            endSpeach = line.find("\"", startSpeach+1)
-                            if comment > endSpeach:
-                                line = line[:comment].strip()
-
-                        position += comment
-
+                f = codecs.open(xvm_configuration_file, 'r', '"utf-8-sig"')
+                for line in f.read().split('\n'):
+                    line = line.strip()
                     if line != "":
-                        data += line + '\n'
-            f.close()
+                        # Start of block comment
+                        comment = line.find("/*")
+                        if comment != -1 and comment == 0:
+                            blockComment = True
+                            continue
 
-            xvm_conf = json.loads(data)
+                        # End of block comment
+                        comment = line.find("*/")
+                        if comment != -1:
+                            blockComment = False
+                            continue
+
+                        # Block Comment
+                        if blockComment == True:
+                            continue
+
+                        # Start of line comment
+                        comment = line.find("//")
+                        if comment != -1 and comment == 0:
+                            continue
+
+                        # Remove end of line comments
+                        position = 0
+                        for i in range(0,line.count("//")):
+                            comment = line.find("//", position+2)
+                            if comment != -1:
+                                colon = line.find(":")
+
+                                startSpeach = line.find("\"", colon+1)
+                                if startSpeach > comment:
+                                    line = line[:comment].strip()
+
+                                endSpeach = line.find("\"", startSpeach+1)
+                                if comment > endSpeach:
+                                    line = line[:comment].strip()
+
+                            position += comment
+
+                        if line != "":
+                            data += line + '\n'
+                f.close()
+
+                xvm_conf = json.loads(data)
+            except Exception as e:
+                SystemMessages.pushMessage("Parsing configuration file: " + str(e), type=SystemMessages.SM_TYPE.Error)
+                return
 
         # Code for migrating old configuration files (v1.5->v1.6)
         if not xvm_conf["tankrange"].has_key("spotting_limit"):
