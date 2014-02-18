@@ -272,7 +272,7 @@ class _CurrentVehicle():
         # Only update when we have a crew
         if not self.isCrewFull():
             if xvm_conf['tankrange']['logging']:
-                LOG_NOTE('no full crew')
+                LOG_NOTE('Crew is missing.')
             return
 
         # Remove current circles
@@ -473,8 +473,6 @@ class _CurrentVehicle():
 
         # Write result
         if saveConfig:
-            if xvm_conf["tankrange"]["logging"]:
-                LOG_NOTE("write config")
             f = codecs.open(xvm_configuration_file, 'w', '"utf-8-sig"')
             f.write(unicode(json.dumps(xvm_conf, ensure_ascii=False, indent=2, sort_keys=True)))
             f.close()
@@ -483,7 +481,7 @@ class _CurrentVehicle():
         if saveConfig and xvm_conf["tankrange"]["notify_changes"]:
             msg = "{0}: View Distance: {1}m".format(g_itemsCache.items.getVehicle(self.__vehInvID).userName, round(view_distance,1) )
             if binocular_distance:
-                msg += " +Binoculars: {0}m".format( round(binocular_distance,1) )
+                msg += " + Binoculars: {0}m".format( round(binocular_distance,1) )
             if artillery_range:
                 msg += " Artillery Range: {0}m".format( round(artillery_range,1) )
             if shell_range > 0 and shell_range < 445:
