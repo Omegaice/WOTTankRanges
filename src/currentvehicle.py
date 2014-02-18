@@ -337,16 +337,16 @@ class _CurrentVehicle():
             LOG_NOTE("BIA Found")
 
         # Calculate commander bonus
-        commander_skill = 0
+        commander_skill = 0.0
         if "commander" in self.__crew:
             commander_skill = self.__crew["commander"]["level"]
 
             if brothers_in_arms == True:
-                commander_skill += 5
+                commander_skill += 5.0
             if ventilation == True:
-                commander_skill += 5
+                commander_skill += 5.0
             if consumable == True:
-                commander_skill += 10
+                commander_skill += 10.0
 
             if xvm_conf["tankrange"]["logging"]:
                 LOG_NOTE("Commander Skill: ", commander_skill)
@@ -379,7 +379,7 @@ class _CurrentVehicle():
             LOG_NOTE("Coated Optics Found")
 
         # Calculate final value
-        view_distance = ((view_distance / 0.875) * (0.00375* commander_skill + 0.5)) * other_bonus
+        view_distance = ((view_distance / 0.875) * (0.00375 * commander_skill + 0.5)) * other_bonus
 
         if xvm_conf["tankrange"]["logging"]:
             LOG_NOTE("Other Bonus:", other_bonus)
@@ -499,7 +499,12 @@ class _CurrentVehicle():
         for tankman in barracks:
             for crewman in self.item.crew:
                 if crewman[1] is not None and crewman[1].invID == tankman.inventoryId:
-                    crew_member = { "level": tankman.descriptor.roleLevel, "skill": {} }
+                    factor = tankman.descriptor.efficiencyOnVehicle(g_itemsCache.items.getVehicle(self.__vehInvID).descriptor)
+
+                    crew_member = {
+                        "level": tankman.descriptor.roleLevel * factor[0], 
+                        "skill": {} 
+                    }
 
                     skills = []
                     for skill_name in tankman.descriptor.skills:
