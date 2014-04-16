@@ -7,7 +7,7 @@ from adisp import async, process
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import prb_control, game_control, g_tankActiveCamouflage, SystemMessages
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared import g_itemsCache, REQ_CRITERIA, g_eventsCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -21,6 +21,7 @@ class _CurrentVehicle():
     def __init__(self):
         self.__vehInvID = 0
         self.__changeCallbackID = None
+        self.__historicalBattle = None
         self.onChanged = Event()
         self.onChangeStarted = Event()
         self.__crew = {}
@@ -77,7 +78,11 @@ class _CurrentVehicle():
 
     def refreshModel(self):
         if self.isPresent() and self.isInHangar() and self.item.modelState:
-            if not g_tankActiveCamouflage.has_key(self.item.intCD):
+            if self.__historicalBattle is not None:
+                historical = g_tankActiveCamouflage['historical']
+                if self.__historicalBattle.canParticipateWith(self.item.intCD) and self.item.intCD not in historical:
+                    historical[self.item.intCD] = self.__historicalBattle.getArenaType().vehicleCamouflageKind
+            if self.item.intCD not in g_tankActiveCamouflage:
                 availableKinds = []
                 currKind = 0
                 for id, startTime, days in self.item.descriptor.camouflages:
@@ -87,7 +92,7 @@ class _CurrentVehicle():
 
                 if len(availableKinds) > 0:
                     g_tankActiveCamouflage[self.item.intCD] = random.choice(availableKinds)
-            g_hangarSpace.updateVehicle(self.item)
+            g_hangarSpace.updateVehicle(self.item, self.__historicalBattle)
         else:
             g_hangarSpace.removeVehicle()
         return
@@ -173,6 +178,12 @@ class _CurrentVehicle():
             state, stateLvl = self.item.getState()
             return ('#menu:currentVehicleStatus/' + state, stateLvl)
         return (MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
+
+    def setHistoricalBattle(self, historicalBattle):
+        g_tankActiveCamouflage['historical'] = {}
+        self.__historicalBattle = historicalBattle
+        self.refreshModel()
+        self.onChanged()
 
     def __selectVehicle(self, vehInvID):
         if vehInvID == self.__vehInvID:
