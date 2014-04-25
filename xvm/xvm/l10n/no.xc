@@ -1,26 +1,12 @@
-﻿/**
- * Norwegian translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "Orrie (EU)",
-
-    // Ping
     "Initialization": "Initialisering",
-
-    // BattleLoading
     "New version available": "Ny versjon tilgjengelig",
-
-    // Win chance
     "Chance error": "Feil med vinnersjanse",
     "Chance to win": "Vinnersjanse",
-    //"global": "global",
-    //"per-vehicle": "per-fartøy",
     "chanceLive": "Live",
     "chanceBattleTier": "T",
-
-    // Hitlog
     "attack": "angrep",
     "fire": "brann",
     "ramming": "kollisjon",
@@ -28,23 +14,15 @@
     "Hits": "Treff",
     "Total": "Totalt",
     "Last": "Siste",
-
-    // Hp Left
     "hpLeftTitle": "Helsepoeng igjen:",
-
-    // Capture
     "enemyBaseCapture": "Base overtakelse av allierte!",
     "enemyBaseCaptured": "Base overtatt av allierte!",
     "allyBaseCapture": "Base overtakelse av fienden!",
     "allyBaseCaptured": "Base overtatt av fienden!",
     "Timeleft": "Tid Igjen",
     "Capturers": "Overtagere",
-
-    // BattleResults
     "Hit percent": "Treffprosent",
     "Damage (assisted / own)": "Skade (assistert / egen)",
-
-    // TeamRenderers
     "Friend": "Venn",
     "Ignored": "Ignorert",
     "unknown": "ukjent",
@@ -52,8 +30,6 @@
     "Wins": "Seire",
     "Data was updated at": "Data var sist oppdatert",
     "Load statistics": "Last inn statistikk",
-
-    // UserInfo
     "General stats": "Generelle Stats",
     "Summary": "Sammendrag",
     "Avg level": "Gj.snittlig kampnivå",
@@ -87,13 +63,9 @@
     "Average hits received": "Treff mottatt",
     "Average penetrations received": "Penetrasjoner mottatt",
     "Average ricochets received": "Rikosjetter mottatt",
-
-    // Crew
     "PutOwnCrew": "Sett egen besetning",
     "PutBestCrew": "Sett beste besetning",
     "PutClassCrew": "Sett besetning av same klasse",
-
-    // Squad
     "Vehicle": "Fartøy",
     "Battle tiers": "Kampnivå",
     "Type": "Type",
@@ -110,8 +82,16 @@
     "LT": "LT",
     "TD": "TD",
     "SPG": "SPG",
-
-    // VehicleMarkersManager
-    "blownUp": "Oppsprengt!"
+    "blownUp": "Oppsprengt!",
+    "token/network_error": "Nettverksfeil. XVM statistikk er ikke tilgjengelig, prøv igjen senere.",
+    "token/bad_token": "Defekt token.\n{{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Status: <font color='#FF0000'>Blokkert</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Status: <font color='#FFFF00'>Inaktiv</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/active": "Status: <font color='#00FF00'>Aktiv</font>",
+    "token/days_left": "Dager igjen:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Timer igjen:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Antall forespørsler:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Ukjent status",
+    "token/notify_xvm_site": "Vennligst gå til <a href='#XVM_SITE#'>XVM siden</a> og aktiver statistikk i kontrollpanelet."
   }
 }

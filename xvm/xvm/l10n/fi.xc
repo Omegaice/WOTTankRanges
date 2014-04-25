@@ -1,26 +1,12 @@
-﻿/**
- * Finnish translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "Mikael Palokangas, Seula, Taifuuni and Tuomas Rantalainen",
-
-    // Ping
     "Initialization": "Alustus",
-
-    // BattleLoading
     "New version available": "Uusi versio on saatavilla",
-
-    // Win chance
     "Chance error": "Todennäköisyyden epävarmuus",
     "Chance to win": "Voittotodennäköisyys",
-    //"global": "globaali",
-    //"per-vehicle": "ajoneuvokohtainen",
     "chanceLive": "Live",
     "chanceBattleTier": "T",
-
-    // Hitlog
     "attack": "osuma",
     "fire": "tulipalo",
     "ramming": "törmäys",
@@ -28,23 +14,15 @@
     "Hits": "Osumat",
     "Total": "Yhteensä",
     "Last": "Viimeisin",
-
-    // Hp Left
     "hpLeftTitle": "Jäljellä olevat kestopisteet:",
-
-    // Capture
     "enemyBaseCapture": "Omat valtaavat tukikohtaa!",
     "enemyBaseCaptured": "Omat valtasivat tukikohdan!!",
     "allyBaseCapture": "Viholliset valtaavat tukikohtaanne!",
     "allyBaseCaptured": "Viholliset valtasivat tukikohtanne!",
     "Timeleft": "Aikaa jäljellä",
     "Capturers": "Valtaajia",
-
-    // BattleResults
     "Hit percent": "Osumaprosentti",
     "Damage (assisted / own)": "Vahinko (avustettu / aiheutettu)",
-
-    // TeamRenderers
     "Friend": "Liittolainen",
     "Ignored": "Sivuutettu",
     "unknown": "ei tietoa",
@@ -52,8 +30,7 @@
     "Wins": "Voitot",
     "Data was updated at": "Tiedot päivitetty",
     "Load statistics": "Lataa tilastot",
-
-    // UserInfo
+    "General stats": "Yleiset tilastot",
     "Summary": "Yhteenveto",
     "Avg level": "Keskim. taso",
     "WN6": "WN6",
@@ -64,17 +41,31 @@
     "avg": "keskim.",
     "top": "ylin",
     "draws": "tasapelit",
+    "Maximum damage": "Vahinkoennätys",
     "Specific damage (Avg dmg / HP)": "Suhteellinen vahinko (Keskim. vahinko / KP)",
     "Capture points": "Valtauspisteet",
     "Defence points": "Puolustuspisteet",
     "Filter": "Suodatin",
-
-    // Crew
+    "Extra data (WoT 0.8.8+)": "Lisätiedot (WOT 0.8.8+)",
+    "Average battle time": "Keskitaisteluaika",
+    "Average battle time per day": "Keskitaisteluaika päivässä",
+    "Battles after 0.8.8": "Taistelut 0.8.8 jälkeen",
+    "Average experience": "Keskikokemus",
+    "Average experience without premium": "Keskikokemus ilman premiumia",
+    "Average distance driven per battle": "Keskiajomatka taistelussa",
+    "Average woodcuts per battle": "Keskim. kaadettuja puita taistelussa",
+    "Average damage assisted": "Keskiavustusvahinko",
+    "    by tracking": "    seuranneena",
+    "    by spotting": "    havainneena",
+    "Average HE shells fired (splash)": "Keskim. HE ammuksia ammuttu (sirpale)",
+    "Average HE shells received (splash)": "Keskim. HE ammuksia saatu (sirpale)",
+    "Average penetrations per battle": "Keskiläpäisyt taistelussa",
+    "Average hits received": "Osumia saatu keskimäärin",
+    "Average penetrations received": "Läpäisyjä vastaanotettu keskimäärin",
+    "Average ricochets received": "Kimmotettu keskimäärin",
     "PutOwnCrew": "Aseta oma miehistö",
     "PutBestCrew": "Aseta paras miehistö",
     "PutClassCrew": "Aseta saman luokan miehistö",
-
-    // Squad
     "Vehicle": "Ajoneuvo",
     "Battle tiers": "Taistelutasot",
     "Type": "Tyyppi",
@@ -91,8 +82,19 @@
     "LT": "LT",
     "TD": "TD",
     "SPG": "SPG",
-
-    // VehicleMarkersManager
-    "blownUp": "Räjähti!"
+    "blownUp": "Räjähti!",
+    "token/network_error": "Verkkovirhe. Ei yhteyttä XVM tilastoihin, yritä uudelleen myöhemmin.",
+    "token/bad_token": "Virhe lukuoikeudessa XVM tilastoihin,
+    {{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Tila: <font color='#FF0000'>Estetty</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Tila: <font color='#FFFF00'>Pois päältä</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/active": "Tila: <font color='#00FF00'>Päällä</font>",
+    "token/days_left": "Päiviä jäljellä:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Tunteja jäljellä:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Kysely laskuri:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Tunnistamaton tila",
+    "token/notify_xvm_site": "<font color='#EEEEEE'>Ohjeet kirjautumiseen,
+    Avaa linkki</font> <a href='#XVM_SITE#'>XVM site</a>. <font color='#FF0000'>Kirjaudu ulos pelistä.</font,
+    <font color='#EEEEEE'>Vaihda avatun sivuston kieli englanniksi. Kirjautuessasi 'sing-in' valitse Eu-serveri. Kirjauduttuasi valitse 'activate', tai 'Prolong'. Voit jatkaa pelaamista. Useammalla tietokoneella valitse 'add PC'.</font>"
   }
 }

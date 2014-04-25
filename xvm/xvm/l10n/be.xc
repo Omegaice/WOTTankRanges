@@ -1,26 +1,12 @@
-﻿/**
- * Belarusian translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "Alexander Shoumsky, <contact@by-reservation.com>",
-
-    // Ping
     "Initialization": "Ініцыялізацыя",
-
-    // BattleLoading
     "New version available": "Даступная новая версія",
-
-    // Win chance
     "Chance error": "Не ўдалося разлічыць шанцы",
     "Chance to win": "Шанец перамагчы",
-    //"global": "агульны",
-    //"per-vehicle": "паводле тэхнікі",
     "chanceLive": "Live",
     "chanceBattleTier": "T",
-
-    // Hitlog
     "attack": "стральба",
     "fire": "пажар",
     "ramming": "таран",
@@ -28,23 +14,15 @@
     "Hits": "Траплянні",
     "Total": "Агулам",
     "Last": "Апошняе",
-
-    // Hp Left
     "hpLeftTitle": "Засталося HP:",
-
-    // Capture
     "enemyBaseCapture": "Захоп варожай базы!",
     "enemyBaseCaptured": "Варожая база захоплена!",
     "allyBaseCapture": "Захоп нашай базы!",
     "allyBaseCaptured": "Нашую базу захапілі!",
     "Timeleft": "Засталося часу",
     "Capturers": "Захопнікаў",
-
-    // BattleResults
     "Hit percent": "Выніковасць стральбы",
     "Damage (assisted / own)": "Пашкоджанні (выяўленых вамі / свае)",
-
-    // TeamRenderers
     "Friend": "Сябар",
     "Ignored": "Ігнараваны",
     "unknown": "невядома",
@@ -52,8 +30,6 @@
     "Wins": "Перамог",
     "Data was updated at": "Звесткі былі абноўленыя а",
     "Load statistics": "Паказаць статыстыку",
-
-    // UserInfo
     "General stats": "Агульная статыстыка",
     "Summary": "Падсумаванне",
     "Avg level": "Сярэдні ўзровень",
@@ -87,13 +63,9 @@
     "Average hits received": "Сяр. атрыманых траплянняў",
     "Average penetrations received": "Сяр. атрыманых прабіццяў",
     "Average ricochets received": "Сяр. атрыманых рыкашэтаў",
-
-    // Crew
     "PutOwnCrew": "Родны экіпаж",
     "PutBestCrew": "Найлепшы экіпаж",
     "PutClassCrew": "Экіпаж таго самага кляса",
-
-    // Squad
     "Vehicle": "Танк",
     "Battle tiers": "Узровень баёў",
     "Type": "Тып",
@@ -110,8 +82,16 @@
     "LT": "ЛТ",
     "TD": "СТ-САУ",
     "SPG": "САУ",
-
-    // VehicleMarkersManager
-    "blownUp": "Выбух ладунку!"
+    "blownUp": "Выбух ладунку!",
+    "token/network_error": "Памылка сеткі. Статыстыка XVM недаступная, паспрабуйце пазней.",
+    "token/bad_token": "Некарэктны токен.\n{{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Стан: <font color='#FF0000'>Заблакаваны</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Стан: <font color='#FFFF00'>Неактыўны</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/active": "Стан:<font color='#00FF00'>Актыўны</font>",
+    "token/days_left": "Засталося дзён:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Засталося гадзін:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Колькасць запытаў:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Невядомы стан",
+    "token/notify_xvm_site": "Калі ласка, перайдзіце на <a href='#XVM_SITE#'> сайт XVM</a> і актывуйце статыстыку ў персанальным кабінеце."
   }
 }

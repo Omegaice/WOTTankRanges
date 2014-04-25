@@ -1,26 +1,12 @@
-/**
- * Danish translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "PowerBait",
-
-    // Ping
     "Initialization": "Initialization",
-
-    // BattleLoading
     "New version available": "New version available",
-
-    // Win chance
     "Chance error": "Chance-fejl",
     "Chance to win": "Chance for at vinde",
-    //"global": "global",
-    //"per-vehicle": "per-vogn",
     "chanceLive": "Live",
     "chanceBattleTier": "T",
-
-    // Hitlog
     "attack": "angreb",
     "fire": "ild",
     "ramming": "sammenstød",
@@ -28,23 +14,15 @@
     "Hits": "Træffere",
     "Total": "Total",
     "Last": "Seneste",
-
-    // Hp Left
     "hpLeftTitle": "Liv tilbage:",
-
-    // Capture
     "enemyBaseCapture": "Base-erobring af allierede!",
     "enemyBaseCaptured": "Base erobret af allierede!",
     "allyBaseCapture": "Base-erobring af fjender!",
     "allyBaseCaptured": "Base erobret af fjender!",
     "Timeleft": "Tid tilbage",
     "Capturers": "Erobrere",
-
-    // BattleResults
     "Hit percent": "Træfprocent",
     "Damage (assisted / own)": "Skade (assisteret / egen)",
-
-    // TeamRenderers
     "Friend": "Ven",
     "Ignored": "Ignoreret",
     "unknown": "ukendt",
@@ -52,8 +30,6 @@
     "Wins": "vundne",
     "Data was updated at": "Data blev opdateret ",
     "Load statistics": "Hent statistikker",
-
-// UserInfo
     "General stats": "Generel statistik",
     "Summary": "Resumé",
     "Avg level": "Gns level",
@@ -87,13 +63,9 @@
     "Average hits received": "Gennemsnitlig hits modtaget",
     "Average penetrations received": "Gennemsnitlig penetration modtaget",
     "Average ricochets received": "Gennemsnitlig ricochets modtaget",
-
-    // Crew
     "PutOwnCrew": "Sæt eget besætning",
     "PutBestCrew": "Sæt bedste besætning",
     "PutClassCrew": "Put samme klasse besætning",
-
-    // Squad
     "Vehicle": "Vogn",
     "Battle tiers": "Kampniveauer",
     "Type": "Type",
@@ -110,8 +82,6 @@
     "LT": "LT",
     "TD": "TD",
     "SPG": "SPG",
-
-    // VehicleMarkersManager
     "blownUp": "Eksploderet!"
   }
 }

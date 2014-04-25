@@ -3,9 +3,6 @@
  */
 {
   "locale": {
-    // Author of translation
-    "XVM_translator": "XVM Team",
-
     // Ping
     "Initialization": "Инициализация",
 
@@ -112,6 +109,18 @@
     "SPG": "САУ",
 
     // VehicleMarkersManager
-    "blownUp": "Взрыв БК!"
+    "blownUp": "Взрыв БК!",
+
+    //Token
+    "token/network_error": "Ошибка сети.\nСтатистика XVM недоступна, попробуйте позже.",
+    "token/bad_token": "Неверный токен.\n{{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Статус: <font color='#FF0000'>Заблокирован</font>\n{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Статус: <font color='#FFFF00'>Неактивен</font>\n{{l10n:token/notify_xvm_site}}",
+    "token/active": "Статус:<tab><font color='#00FF00'>Активен</font>",
+    "token/days_left": "Осталось дней:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Осталось часов:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Количество запросов:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Неизвестный статус",
+    "token/notify_xvm_site": "Пожалуйста, перейдите на <a href='#XVM_SITE#'>сайт XVM</a> и активируйте статистику в личном кабинете."
   }
 }

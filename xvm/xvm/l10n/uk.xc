@@ -1,26 +1,12 @@
-﻿/**
- * Ukrainian translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "RedMor, Vlad VirusX",
-
-    // Ping
     "Initialization": "Ініціалізація",
-
-    // BattleLoading
     "New version available": "Доступна нова версія",
-
-    // Win chance
     "Chance error": "Помилка розрахунку шансів",
     "Chance to win": "Шанси на перемогу",
-    //"global": "загальний",
-    //"per-vehicle": "по техніці",
     "chanceLive": "Живі",
     "chanceBattleTier": "T",
-
-    // Hitlog
     "attack": "атака",
     "fire": "пожежа",
     "ramming": "таран",
@@ -28,23 +14,15 @@
     "Hits": "Пробито",
     "Total": "Всього",
     "Last": "Останній",
-
-    // Hp Left
     "hpLeftTitle": "Залишилось HP:",
-
-    // Capture
     "enemyBaseCapture": "Захоплення бази союзниками!",
     "enemyBaseCaptured": "База захоплена союзниками!",
     "allyBaseCapture": "Захоплення бази ворогами!",
     "allyBaseCaptured": "База захоплена ворогами!",
     "Timeleft": "Залишилось",
     "Capturers": "Загарбників",
-
-    // BattleResults
     "Hit percent": "Відсоток влучень",
     "Damage (assisted / own)": "Пошкодження (з вашою допомогою / свої)",
-
-    // TeamRenderers
     "Friend": "Друг",
     "Ignored": "Ігнор",
     "unknown": "невідомо",
@@ -52,8 +30,6 @@
     "Wins": "Перемог",
     "Data was updated at": "Дані були оновлені",
     "Load statistics": "Завантажити статистику",
-
-    // UserInfo
     "General stats": "Загальна статистика",
     "Summary": "Загальні результати",
     "Avg level": "Середній рівень",
@@ -67,8 +43,8 @@
     "draws": "нічиїх",
     "Maximum damage": "Максимальні пошкодження",
     "Specific damage (Avg dmg / HP)": "Пит. пошкодж. (сер. пошкодж. / HP)",
-    "Capture points": "Балів захоплення",
-    "Defence points": "Балів захисту",
+    "Capture points": "Очок захоплення",
+    "Defence points": "Очок захисту",
     "Filter": "Фільтр",
     "Extra data (WoT 0.8.8+)": "Дод. дані (WoT 0.8.8+)",
     "Average battle time": "Середній час життя в бою",
@@ -80,20 +56,16 @@
     "Average woodcuts per battle": "У середньому повалено дерев за бій",
     "Average damage assisted": "Середні пошкодження з вашою допомогою",
     "    by tracking": "    після збиття гусениці",
-    "    by spotting": "    по розвідданим",
+    "    by spotting": "    за розвідданими",
     "Average HE shells fired (splash)": "Середні пошкодження фугасами (сплеш)",
     "Average HE shells received (splash)": "Середні отримані пошкодження фугасами",
     "Average penetrations per battle": "В середньому пробито за бій",
     "Average hits received": "У середньому отримано влучень",
-    "Average penetrations received": "У середньому отримано пробить",
+    "Average penetrations received": "У середньому отримано пробивань",
     "Average ricochets received": "У середньому отримано рикошетів",
-
-    // Crew
     "PutOwnCrew": "Рідний екіпаж",
     "PutBestCrew": "Кращий екіпаж",
     "PutClassCrew": "Екіпаж того ж класу",
-
-    // Squad
     "Vehicle": "Танк",
     "Battle tiers": "Рівень боїв",
     "Type": "Тип",
@@ -110,8 +82,16 @@
     "LT": "ЛТ",
     "TD": "ПТ",
     "SPG": "САУ",
-
-    // VehicleMarkersManager
-    "blownUp": "Вибух БК!"
+    "blownUp": "Вибух БК!",
+    "token/network_error": "Помилка мережі. Статистика XVM недоступна, спробуйте пізніше.",
+    "token/bad_token": "Невiрный токен.\n{{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Статус: <font color='#FF0000'>Заблокований</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Статус: <font color='#FFFF00'>Неактивний</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/active": "Статус:<font color='#00FF00'>Активний</font>",
+    "token/days_left": "Залишилось днів:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Залишилось годин:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Кiлькiсть запитiв:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Невідомий статус",
+    "token/notify_xvm_site": "Будь-ласка, перейдіть на <a href='#XVM_SITE#'>сайт XVM</a> та активуйте статистику в особистому кабінеті."
   }
 }

@@ -1,26 +1,12 @@
-﻿/**
- * Hungarian translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "drhideg",
-
-    // Ping
     "Initialization": "Inicializálás",
-
-    // BattleLoading
     "New version available": "Új verzió elérhető",
-
-    // Win chance
     "Chance error": "Esély lekérdezési hiba",
     "Chance to win": "Esély a győzelemre",
-    //"global": "Globálisan",
-    //"per-vehicle": "Járművenként",
     "chanceLive": "Élő",
     "chanceBattleTier": "T",
-
-    // Hitlog
     "attack": "támadás",
     "fire": "tűz",
     "ramming": "ütközés",
@@ -28,23 +14,15 @@
     "Hits": "Találatok",
     "Total": "Összesen",
     "Last": "Utoljára",
-
-    // Hp Left
     "hpLeftTitle": "Maradék életerő:",
-
-    // Capture
     "enemyBaseCapture": "Ellenséges bázis foglalva!",
     "enemyBaseCaptured": "Ellenséges bázis elfoglalva!",
     "allyBaseCapture": "Szövetséges bázis foglalva!",
     "allyBaseCaptured": "Szövetséges bázis elfoglalva!",
     "Timeleft": "Hátralévő idő",
     "Capturers": "Foglalók",
-
-    // BattleResults
     "Hit percent": "Találati arány",
     "Damage (assisted / own)": "Sebzés (hozzájárulás / saját)",
-
-    // TeamRenderers
     "Friend": "Barát",
     "Ignored": "Tiltott",
     "unknown": "ismeretlen",
@@ -52,8 +30,6 @@
     "Wins": "Győzelmek",
     "Data was updated at": "Adatok frissítve",
     "Load statistics": "Statisztika betöltése",
-
-    // UserInfo
     "General stats": "Általános statisztika",
     "Summary": "Összefoglaló",
     "Avg level": "Átlag szint",
@@ -87,13 +63,9 @@
     "Average hits received": "Átlagosan kapott találat",
     "Average penetrations received": "Átlagosan kapott páncélátütő találat",
     "Average ricochets received": "Átlagosan kapott lepattanó találat",
-
-    // Crew
     "PutOwnCrew": "Saját legénység",
     "PutBestCrew": "Legjobb legénység",
     "PutClassCrew": "Azonos típusú legénység",
-
-    // Squad
     "Vehicle": "Jármű",
     "Battle tiers": "Csata szintek",
     "Type": "Típus",
@@ -110,8 +82,17 @@
     "LT": "LT",
     "TD": "TD",
     "SPG": "SPG",
-
-    // VehicleMarkersManager
-    "blownUp": "Felrobbant!"
+    "blownUp": "Felrobbant!",
+    "token/network_error": "Hálózati hiba. XVM statisztika nem elérhető, próbáld később!",
+    "token/bad_token": "Rossz token,
+    {{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Állapot: <font color='#FF0000'>Zárolt</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Állapot: <font color='#FFFF00'>Inaktív</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/active": "Állapot: <font color='#00FF00'>Aktív</font>",
+    "token/days_left": "Hátralévő napok:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Hátralévő órák:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Kérések száma:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Ismeretlen állapot",
+    "token/notify_xvm_site": "Látogasd meg az <a href='#XVM_SITE#'>XVM oldalt</a> és aktiváld a statisztikát a személyes beállításoknál!"
   }
 }

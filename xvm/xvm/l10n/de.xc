@@ -1,26 +1,12 @@
-﻿/**
- * German translation file.
- */
 {
   "locale": {
-    // Author of translation
     "XVM_translator": "diclovit",
-
-    // Ping
     "Initialization": "Initialisierung",
-
-    // BattleLoading
     "New version available": "Neue Version verfügbar",
-
-    // Win chance
     "Chance error": "Fehler bei Berechnung der Siegchance",
     "Chance to win": "Siegchance",
-    //"global": "Global",
-    //"per-vehicle": "pro Fahrzeug",
     "chanceLive": "Live",
-    "chanceBattleTier": "Stufe",    
-
-    // Hitlog
+    "chanceBattleTier": "Stufe",
     "attack": "Angriff",
     "fire": "Feuer",
     "ramming": "Rammen",
@@ -28,23 +14,15 @@
     "Hits": "Treffer",
     "Total": "Gesamt",
     "Last": "Zuletzt",
-
-    // Hp Left
     "hpLeftTitle": "Verbleibende Trefferpunkte:",
-
-    // Capture
     "enemyBaseCapture": "Feindliche Basis wird erobert!",
     "enemyBaseCaptured": "Feindliche Basis wurde erobert!",
     "allyBaseCapture": "Eigene Basis wird eingenommen!",
     "allyBaseCaptured": "Eigene Basis verloren!",
     "Timeleft": "Verbleibende Zeit",
     "Capturers": "Panzer",
-
-    // BattleResults
     "Hit percent": "Trefferquote",
     "Damage (assisted / own)": "Schaden (ermöglicht / verursacht)",
-
-    // TeamRenderers
     "Friend": "Freund",
     "Ignored": "Ignoriert",
     "unknown": "unbekannt",
@@ -52,8 +30,6 @@
     "Wins": "Siege",
     "Data was updated at": "Daten aktualisiert am",
     "Load statistics": "Lade Statistiken",
-
-    // UserInfo
     "General stats": "Allgemeine Statistik",
     "Summary": "Zusammenfassung",
     "Avg level": "Ø-Stufe",
@@ -86,18 +62,14 @@
     "Average penetrations per battle": "Ø Wirkungstreffer",
     "Average hits received": "Ø erhaltene Treffer",
     "Average penetrations received": "    - Wirkungstreffer",
-    "Average ricochets received": "    - nicht durchschlagende Treffer",    
- 
-    // Crew
+    "Average ricochets received": "    - nicht durchschlagende Treffer",
     "PutOwnCrew": "Eingewiesene Besatzung einsetzen",
     "PutBestCrew": "Beste Besatzung einsetzen",
     "PutClassCrew": "Besatzung der selben Klasse einsetzen",
-
-    // Squad
     "Vehicle": "Fahrzeug",
     "Battle tiers": "Gefechtsstufen",
     "Type": "Typ",
-    "Nation": "Nation",    
+    "Nation": "Nation",
     "ussr": "UdSSR",
     "germany": "Deutschland",
     "usa": "USA",
@@ -110,8 +82,16 @@
     "LT": "LP",
     "TD": "JP",
     "SPG": "SFL",
-
-    // VehicleMarkersManager
-    "blownUp": "Munitionsexplosion!"
+    "blownUp": "Munitionsexplosion!",
+    "token/network_error": "Netzwerkfehler, XVM Statistiken derzeit nicht verfügbar, bitte versuche es später noch einmal.",
+    "token/bad_token": "Ungültiges Token.\n{{l10n:token/notify_xvm_site}}",
+    "token/blocked": "Status: <font color='#FF0000'>Blockiert</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/inactive": "Status: <font color='#FFFF00'>Inaktiv</font><br>{{l10n:token/notify_xvm_site}}",
+    "token/active": "Status: <font color='#00FF00'>Aktiv</font>",
+    "token/days_left": "Verbleibende Tage:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/hours_left": "Verbleibende Stunden:<tab/><font color='#ffff00'>{0}</font>",
+    "token/cnt": "Abrufe:<tab/><font color='#eeeeee'>{0}</font>",
+    "token/unknown_status": "Unbekannter Status",
+    "token/notify_xvm_site": "Bitte besuche die <a href='#XVM_SITE#'>XVM Webseite</a> und aktiviere die Statistiken für deinen Account."
   }
 }
